@@ -64,6 +64,10 @@ int main()
 	sf::Texture mushroomTexture;
 	mushroomTexture.loadFromFile("assets/textures/Mushroom.png");
 
+	// TextImage
+	sf::Texture foundKey;
+	foundKey.loadFromFile("assets/textImages/TextKey.png");
+
 	//==========================================================================================================================================//
 	// Clock 
 
@@ -162,6 +166,7 @@ int main()
 	int countDie = 0;
 	bool checkGameRestart = false;
 	bool restartGame = false;
+	bool continueGame = false;
 	bool checkstate1_out = false;
 
 	//==========================================================================================================================================// 
@@ -358,6 +363,8 @@ int main()
 			Platform trap1Mushroom(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((16 - 8) * 4, (368 - 8) * 4));
 			Platform trap1Stone(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((32 - 8) * 4, (368 - 8) * 4));
 
+			
+
 			// BitMap Init
 			std::vector<Bitmap> block0;
 			int outdoor[33][36] = {
@@ -449,8 +456,8 @@ int main()
 				for (int i = 0; i < block0.size(); i++)
 					block0[i].getCollider().CheckCollision(playerCollision, 1.0f);
 
-				//Platform Collision  Box1.GetCollider().CheckCollision(playerCollision, 1.0f);
-
+				//Platform Collision  
+					//Box1.GetCollider().CheckCollision(playerCollision, 1.0f);
 
 				// DrawBackground
 				view.setCenter(player.GetPosition());
@@ -460,8 +467,47 @@ int main()
 				Background2.Draw(window);
 
 				// Trap 1
-				if (player.GetGlobalBounds().intersects(trap1Pokeball.GetGlobalBounds()))
+				if (!checkPokeballTrap1 && player.GetGlobalBounds().intersects(trap1Pokeball.GetGlobalBounds())) //Get Pokeball
+				{
+					Platform trap1TextKey(&foundKey, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
 					checkPokeballTrap1 = true;
+					while (window.isOpen())
+					{
+						//Close Window//
+						sf::Event evnt;
+						while (window.pollEvent(evnt))
+						{
+							switch (evnt.type)
+							{
+							case sf::Event::Closed:
+								window.close();
+								break;
+							case sf::Event::Resized:
+								std::cout << "\Resized\n";
+								ResizeView(window, view);
+								break;
+							case sf::Event::KeyReleased:
+								if (evnt.key.code == sf::Keyboard::Return)
+									continueGame = true;
+								break;
+							}
+						}
+
+						if (continueGame)
+						{
+							std::cout << "Enter Click\n\n";
+							
+							continueGame = false;
+							break;
+						}
+						window.clear();
+						Background2.Draw(window);
+						player.Draw(window);
+						window.setView(view);
+						trap1TextKey.Draw(window);
+						window.display();
+					}
+				}		
 				if (checkPokeballTrap1)
 				{
 					trap1Mushroom.Draw(window);
