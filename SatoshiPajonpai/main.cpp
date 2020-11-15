@@ -176,7 +176,10 @@ int main()
 	{
 		// status state //
 		bool checkPokeballTrap1 = false;
+		bool checkTrap2 = false;
+		bool checkExitTrap2 = false;
 
+		
 		// state //
 		if (state == 1)
 		{
@@ -313,12 +316,13 @@ int main()
 									break;
 								}
 							}
-
+							
 							if (restartGame)
 							{
 								std::cout << "xxxx\n\n";
 								break;
 							}
+							
 							window.clear();
 							Background1.Draw(window);
 							die.Draw(window);
@@ -347,7 +351,7 @@ int main()
 			}
 		}
 		else if (state == 2)
-		{
+		{		
 			// Set Position
 			player.SetPosition(576, 751);
 
@@ -357,13 +361,20 @@ int main()
 			Platform Background2(&backgroundState5Texture, sf::Vector2f(576 * 64 / 16, 529 * 64 / 16), sf::Vector2f(576 * 64 / 32, 529 * 64 / 32));
 
 			// Platform init
-			Platform die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((16 - 8) * 4, (368 - 8) * 4));
+			Platform trap1Die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((16 - 8) * 4, (368 - 8) * 4));
+			Platform trap2Die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((368 - 8) * 4, (368 - 8) * 4));
 			Platform door1(nullptr, sf::Vector2f(64, 64), sf::Vector2f(576, 751 - 70));
+			Platform stone1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((16 - 8) * 4, (416 - 8) * 4));
+			Platform stone2(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((32 - 8) * 4, (416 - 8) * 4));
 			Platform trap1Pokeball(&pokeballTexture, sf::Vector2f(64, 64), sf::Vector2f((96 - 8) * 4, (336 - 8) * 4));
 			Platform trap1Mushroom(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((16 - 8) * 4, (368 - 8) * 4));
 			Platform trap1Stone(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((32 - 8) * 4, (368 - 8) * 4));
-
-			
+			Platform trap2Stone1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (384 - 8) * 4));
+			Platform trap2Stone2(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (400 - 8) * 4));
+			Platform trap2Stone3(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((192 - 8) * 4, (384 - 8) * 4));
+			Platform trap2Stone4(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((192 - 8) * 4, (400 - 8) * 4));
+			Platform trap2Stone5(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((352 - 8) * 4, (368 - 8) * 4));
+			Platform trap2Mushroom(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((368 - 8) * 4, (368 - 8) * 4));
 
 			// BitMap Init
 			std::vector<Bitmap> block0;
@@ -437,7 +448,7 @@ int main()
 						break;
 					}
 				}
-
+				
 				// Player Update
 				player.Update(deltaTime);
 
@@ -457,14 +468,16 @@ int main()
 					block0[i].getCollider().CheckCollision(playerCollision, 1.0f);
 
 				//Platform Collision  
-					//Box1.GetCollider().CheckCollision(playerCollision, 1.0f);
+				stone1.GetCollider().CheckCollision(playerCollision, 1.0f);
+				stone2.GetCollider().CheckCollision(playerCollision, 1.0f);
 
 				// DrawBackground
 				view.setCenter(player.GetPosition());
 				std::cout << "x = " << player.GetPosition().x << " y = " << player.GetPosition().y << std::endl;
 				window.clear();
-				door1.Draw(window);
 				Background2.Draw(window);
+				stone1.Draw(window);
+				stone2.Draw(window);
 
 				// Trap 1
 				if (!checkPokeballTrap1 && player.GetGlobalBounds().intersects(trap1Pokeball.GetGlobalBounds())) //Get Pokeball
@@ -519,7 +532,8 @@ int main()
 						std::cout << "\nDIE\n";
 						while (window.isOpen())
 						{
-
+							stone1.Draw(window);
+							stone2.Draw(window);
 							//Close Window//
 							sf::Event evnt;
 							while (window.pollEvent(evnt))
@@ -548,9 +562,10 @@ int main()
 							window.clear();
 							Background2.Draw(window);
 							trap1Stone.Draw(window);
-							die.Draw(window);
+							stone1.Draw(window);
+							stone2.Draw(window);
+							trap1Die.Draw(window);
 							window.setView(view);
-
 							window.display();
 						}
 					}
@@ -558,6 +573,79 @@ int main()
 				else
 				{
 					trap1Pokeball.Draw(window);
+				}
+				 
+				// Trap 2
+				if (!checkTrap2 && player.GetPosition().x > 432 * 4 && player.GetPosition().y > 368 * 4 && player.GetPosition().y < 400 * 4)
+				{
+					checkTrap2 = true;
+				}
+				if (checkTrap2)
+				{
+					trap2Stone1.GetCollider().CheckCollision(playerCollision, 1.0f);
+					trap2Stone2.GetCollider().CheckCollision(playerCollision, 1.0f);
+					trap2Stone1.Draw(window);
+					trap2Stone2.Draw(window);
+				
+					if (player.GetPosition().x < 224 * 4 && player.GetPosition().x > 192 * 4 && player.GetPosition().y > 368 * 4 && player.GetPosition().y < 400 * 4)
+						checkExitTrap2 = true;
+					
+					
+				}
+				if (checkExitTrap2)
+				{
+					trap2Stone3.GetCollider().CheckCollision(playerCollision, 1.0f);
+					trap2Stone4.GetCollider().CheckCollision(playerCollision, 1.0f);
+					trap2Stone5.GetCollider().CheckCollision(playerCollision, 1.0f);
+					trap2Stone3.Draw(window);
+					trap2Stone4.Draw(window);
+					trap2Stone5.Draw(window);
+					trap2Mushroom.Draw(window);
+					if (player.GetGlobalBounds().intersects(trap2Mushroom.GetGlobalBounds()))
+					{
+						//Die
+						std::cout << "\nDIE\n";
+						while (window.isOpen())
+						{
+							stone1.Draw(window);
+							stone2.Draw(window);
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										restartGame = true;
+									break;
+								}
+							}
+
+							if (restartGame)
+							{
+								std::cout << "xxxx\n\n";
+								break;
+							}
+							window.clear();
+							Background2.Draw(window);
+							trap2Stone1.Draw(window);
+							trap2Stone2.Draw(window);
+							trap2Stone3.Draw(window);
+							trap2Stone4.Draw(window);
+							trap2Stone5.Draw(window);
+							trap2Die.Draw(window);
+							window.setView(view);
+							window.display();
+						}
+					}
 				}
 
 				// DrawPlayer
@@ -582,6 +670,7 @@ int main()
 					break;
 				}
 
+				// Display
 				window.display();
 			}
 		}
@@ -641,7 +730,7 @@ int main()
 						break;
 					}
 				}
-
+				
 				// Player Update
 				player.Update(deltaTime);
 
