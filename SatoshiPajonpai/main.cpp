@@ -68,6 +68,9 @@ int main()
 	sf::Texture foundKey;
 	foundKey.loadFromFile("assets/textImages/TextKey.png");
 
+	sf::Texture foundMedicine;
+	foundMedicine.loadFromFile("assets/textImages/TextMedicine.png");
+
 	//==========================================================================================================================================//
 	// Clock 
 
@@ -178,7 +181,8 @@ int main()
 		bool checkPokeballTrap1 = false;
 		bool checkTrap2 = false;
 		bool checkExitTrap2 = false;
-
+		bool checkTrap3 = false;
+		bool checkTrap3Pokeball = false;
 		
 		// state //
 		if (state == 1)
@@ -366,15 +370,22 @@ int main()
 			Platform door1(nullptr, sf::Vector2f(64, 64), sf::Vector2f(576, 751 - 70));
 			Platform stone1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((16 - 8) * 4, (416 - 8) * 4));
 			Platform stone2(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((32 - 8) * 4, (416 - 8) * 4));
+			
 			Platform trap1Pokeball(&pokeballTexture, sf::Vector2f(64, 64), sf::Vector2f((96 - 8) * 4, (336 - 8) * 4));
 			Platform trap1Mushroom(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((16 - 8) * 4, (368 - 8) * 4));
 			Platform trap1Stone(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((32 - 8) * 4, (368 - 8) * 4));
+			
 			Platform trap2Stone1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (384 - 8) * 4));
 			Platform trap2Stone2(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (400 - 8) * 4));
 			Platform trap2Stone3(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((192 - 8) * 4, (384 - 8) * 4));
 			Platform trap2Stone4(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((192 - 8) * 4, (400 - 8) * 4));
 			Platform trap2Stone5(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((352 - 8) * 4, (368 - 8) * 4));
 			Platform trap2Mushroom(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((368 - 8) * 4, (368 - 8) * 4));
+
+			Platform trap3stone1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((128 - 8) * 4, (448 - 8) * 4));
+			Platform trap3stone2(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((128 - 8) * 4, (464 - 8) * 4));
+			Platform trap3Pokeball(&pokeballTexture, sf::Vector2f(64, 64), sf::Vector2f((64 - 8) * 4, (432 - 8) * 4));
+		
 
 			// BitMap Init
 			std::vector<Bitmap> block0;
@@ -589,8 +600,6 @@ int main()
 				
 					if (player.GetPosition().x < 224 * 4 && player.GetPosition().x > 192 * 4 && player.GetPosition().y > 368 * 4 && player.GetPosition().y < 400 * 4)
 						checkExitTrap2 = true;
-					
-					
 				}
 				if (checkExitTrap2)
 				{
@@ -646,6 +655,120 @@ int main()
 							window.display();
 						}
 					}
+				}
+
+				// Trap 3
+				if (player.GetPosition().x > 48 * 4 && player.GetPosition().x < 100 * 4 && player.GetPosition().y > 416 * 4 && player.GetPosition().y < 480 * 4)
+				{
+					checkTrap3 = true;
+				}
+				if (checkTrap3)
+				{
+					trap3stone1.Draw(window);
+					trap3stone2.Draw(window);
+					trap3stone1.GetCollider().CheckCollision(playerCollision, 1.0f);
+					trap3stone2.GetCollider().CheckCollision(playerCollision, 1.0f);
+				
+					if (!checkTrap3Pokeball && player.GetGlobalBounds().intersects(trap3Pokeball.GetGlobalBounds()))
+					{
+						Platform trap1TextMedicine(&foundMedicine, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						checkTrap3Pokeball = true;
+						//Text Get Drug
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										continueGame = true;
+									break;
+								}
+							}
+
+							if (continueGame)
+							{
+								std::cout << "Enter Click\n\n";
+
+								continueGame = false;
+								break;
+							}
+							window.clear();
+							Background2.Draw(window);
+							player.Draw(window);
+							window.setView(view);
+							stone1.Draw(window);
+							stone2.Draw(window);
+							trap3stone1.Draw(window);
+							trap3stone2.Draw(window);
+							trap1Pokeball.Draw(window);
+							trap1TextMedicine.Draw(window);
+							window.display();
+						}
+					}
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+					{
+						Platform trap3Die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y));
+						//Die
+						std::cout << "\nDIE\n";
+						while (window.isOpen())
+						{
+							stone1.Draw(window);
+							stone2.Draw(window);
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										restartGame = true;
+									break;
+								}
+							}
+
+							if (restartGame)
+							{
+								std::cout << "xxxx\n\n";
+								break;
+							}
+							window.clear();
+							Background2.Draw(window);
+							trap3Die.Draw(window);
+							
+							stone1.Draw(window);
+							stone2.Draw(window);
+							trap3stone1.Draw(window);
+							trap3stone2.Draw(window);
+							trap1Pokeball.Draw(window);
+						
+							window.setView(view);
+							window.display();
+						}
+						
+					}
+				}
+				if (!checkTrap3Pokeball)
+				{
+					trap3Pokeball.Draw(window);
 				}
 
 				// DrawPlayer
