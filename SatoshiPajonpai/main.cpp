@@ -71,6 +71,15 @@ int main()
 	sf::Texture foundMedicine;
 	foundMedicine.loadFromFile("assets/textImages/TextMedicine.png");
 
+	sf::Texture TextDieFloor;
+	TextDieFloor.loadFromFile("assets/textImages/TextDieFloor.png");
+
+	sf::Texture TextDieMedicine;
+	TextDieMedicine.loadFromFile("assets/textImages/TextDieMedicine.png");
+
+	sf::Texture TextDieMushroom;
+	TextDieMushroom.loadFromFile("assets/textImages/TextDieMushroom.png");
+
 	//==========================================================================================================================================//
 	// Clock 
 
@@ -183,6 +192,7 @@ int main()
 		bool checkExitTrap2 = false;
 		bool checkTrap3 = false;
 		bool checkTrap3Pokeball = false;
+		bool checkKey = false;
 		
 		// state //
 		if (state == 1)
@@ -297,7 +307,7 @@ int main()
 				{
 					if (player.GetPosition().x >= (16 * 6) * 4 && player.GetPosition().x <= (16 * 7) * 4 && player.GetPosition().y >= (16 * 10) * 4 && player.GetPosition().y <= (16 * 11) * 4)
 					{
-						std::cout << "\nDIE\n";
+						Platform TextDieFloorState1(&TextDieFloor, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, (16 * 11) * 4 + 325));
 						while (window.isOpen())
 						{
 
@@ -330,6 +340,7 @@ int main()
 							window.clear();
 							Background1.Draw(window);
 							die.Draw(window);
+							TextDieFloorState1.Draw(window);
 							window.setView(view);
 
 							window.display();
@@ -368,6 +379,7 @@ int main()
 			Platform trap1Die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((16 - 8) * 4, (368 - 8) * 4));
 			Platform trap2Die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((368 - 8) * 4, (368 - 8) * 4));
 			Platform door1(nullptr, sf::Vector2f(64, 64), sf::Vector2f(576, 751 - 70));
+			Platform door2(nullptr, sf::Vector2f(15*4, 15*4), sf::Vector2f(500.5*4, 320*4));
 			Platform stone1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((16 - 8) * 4, (416 - 8) * 4));
 			Platform stone2(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((32 - 8) * 4, (416 - 8) * 4));
 			
@@ -386,6 +398,9 @@ int main()
 			Platform trap3stone2(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((128 - 8) * 4, (464 - 8) * 4));
 			Platform trap3Pokeball(&pokeballTexture, sf::Vector2f(64, 64), sf::Vector2f((64 - 8) * 4, (432 - 8) * 4));
 		
+			Platform trap4stone1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (432 - 8) * 4));
+			Platform trap4stone2(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (448 - 8) * 4));
+
 
 			// BitMap Init
 			std::vector<Bitmap> block0;
@@ -539,6 +554,7 @@ int main()
 					trap1Stone.GetCollider().CheckCollision(playerCollision, 1.0f);
 					if (player.GetGlobalBounds().intersects(trap1Mushroom.GetGlobalBounds()))
 					{
+						Platform TextDieMushroom1(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
 						//Die
 						std::cout << "\nDIE\n";
 						while (window.isOpen())
@@ -574,8 +590,10 @@ int main()
 							Background2.Draw(window);
 							trap1Stone.Draw(window);
 							stone1.Draw(window);
+							trap3Pokeball.Draw(window);
 							stone2.Draw(window);
 							trap1Die.Draw(window);
+							TextDieMushroom1.Draw(window);
 							window.setView(view);
 							window.display();
 						}
@@ -587,7 +605,7 @@ int main()
 				}
 				 
 				// Trap 2
-				if (!checkTrap2 && player.GetPosition().x > 432 * 4 && player.GetPosition().y > 368 * 4 && player.GetPosition().y < 400 * 4)
+				if (!checkTrap2 && player.GetPosition().x > 432 * 4 && player.GetPosition().x < 448 * 4 && player.GetPosition().y > 368 * 4 && player.GetPosition().y < 400 * 4)
 				{
 					checkTrap2 = true;
 				}
@@ -771,9 +789,19 @@ int main()
 					trap3Pokeball.Draw(window);
 				}
 
+				// Trap 4
+				if (player.GetPosition().x > 432 * 4 && player.GetPosition().y > 416 * 4 && player.GetPosition().y < 448 * 4)
+				{
+					trap4stone1.GetCollider().CheckCollision(playerCollision, 1.0f);
+					trap4stone2.GetCollider().CheckCollision(playerCollision, 1.0f);
+					trap4stone1.Draw(window);
+					trap4stone2.Draw(window);
+				}
+
 				// DrawPlayer
 				player.Draw(window);
 				window.setView(view);
+				door2.Draw(window);
 
 				// Goto State 1
 				if (player.GetGlobalBounds().intersects(door1.GetGlobalBounds()))
@@ -786,6 +814,21 @@ int main()
 					}
 				}
 
+				//Goto State 3
+				if (player.GetGlobalBounds().intersects(door2.GetGlobalBounds()))
+				{
+					if (checkKey)
+					{
+						state = 3;
+						break;
+					}
+					else
+					{
+						//printTEXT Find Key;
+					}
+					
+				}
+				
 				//Goto Restart
 				if (restartGame)
 				{
@@ -801,7 +844,7 @@ int main()
 		{
 			// Background
 			sf::Texture backgroundState5Texture;
-			backgroundState5Texture.loadFromFile("Map3.png");
+			backgroundState5Texture.loadFromFile("assets/maps/Map3.png");
 			Platform Background3(&backgroundState5Texture, sf::Vector2f(224 * 64 / 16, 160 * 64 / 16), sf::Vector2f(224 * 64 / 32, 160 * 64 / 32));
 
 			// BitMap Init
