@@ -554,7 +554,7 @@ int main()
 					trap1Stone.GetCollider().CheckCollision(playerCollision, 1.0f);
 					if (player.GetGlobalBounds().intersects(trap1Mushroom.GetGlobalBounds()))
 					{
-						Platform TextDieMushroom1(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						Platform TextDieMushroomTrap1(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
 						//Die
 						std::cout << "\nDIE\n";
 						while (window.isOpen())
@@ -593,7 +593,7 @@ int main()
 							trap3Pokeball.Draw(window);
 							stone2.Draw(window);
 							trap1Die.Draw(window);
-							TextDieMushroom1.Draw(window);
+							TextDieMushroomTrap1.Draw(window);
 							window.setView(view);
 							window.display();
 						}
@@ -621,6 +621,7 @@ int main()
 				}
 				if (checkExitTrap2)
 				{
+					
 					trap2Stone3.GetCollider().CheckCollision(playerCollision, 1.0f);
 					trap2Stone4.GetCollider().CheckCollision(playerCollision, 1.0f);
 					trap2Stone5.GetCollider().CheckCollision(playerCollision, 1.0f);
@@ -630,6 +631,7 @@ int main()
 					trap2Mushroom.Draw(window);
 					if (player.GetGlobalBounds().intersects(trap2Mushroom.GetGlobalBounds()))
 					{
+						Platform TextDieMushroomTrap2(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
 						//Die
 						std::cout << "\nDIE\n";
 						while (window.isOpen())
@@ -669,6 +671,7 @@ int main()
 							trap2Stone4.Draw(window);
 							trap2Stone5.Draw(window);
 							trap2Die.Draw(window);
+							TextDieMushroomTrap2.Draw(window);
 							window.setView(view);
 							window.display();
 						}
@@ -736,6 +739,7 @@ int main()
 					}
 					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
 					{
+						Platform TextDieMedicineTrap3(&TextDieMedicine, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
 						Platform trap3Die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y));
 						//Die
 						std::cout << "\nDIE\n";
@@ -777,7 +781,7 @@ int main()
 							trap3stone1.Draw(window);
 							trap3stone2.Draw(window);
 							trap1Pokeball.Draw(window);
-						
+							TextDieMedicineTrap3.Draw(window);
 							window.setView(view);
 							window.display();
 						}
