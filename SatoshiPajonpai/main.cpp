@@ -21,7 +21,7 @@ void ResizeView(const sf::RenderWindow& window, sf::View& view)
 	view.setSize(VIEW_HEIGHT * aspectRatio, VIEW_HEIGHT);
 }
 
-int main()
+int long main()
 {
 	//==========================================================================================================================================//
 	// Window Screen View
@@ -199,6 +199,10 @@ int main()
 		bool checkTrap5Pokeball = false;
 		bool checkTrap5ShowText = false;
 		bool checkKey = false;
+		bool trap6_1 = false;
+		bool trap6_2 = false;
+		bool trap6_3 = false;
+		bool trap6_4 = false;
 		
 		// state //
 		if (state == 1)
@@ -242,7 +246,7 @@ int main()
 				{
 					if (outdoor[mapY][mapX] == 1)
 					{
-						Bitmap outdoor(nullptr, sf::Vector2f(((mapX) * 64) + 32, ((mapY) * 64) + 32), sf::Vector2f(64.f, 64.f));
+						Bitmap outdoor(nullptr, sf::Vector2f(((mapX) * 64.f) + 32.f, ((mapY) * 64.f) + 32.f), sf::Vector2f(64.f, 64.f));
 						block0.push_back(outdoor);
 					}
 				}
@@ -408,7 +412,11 @@ int main()
 			Platform trap4stone2(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (448 - 8) * 4));
 			
 			Platform trap5Pokeball(&pokeballTexture, sf::Vector2f(64, 64), sf::Vector2f((64 - 8) * 4, (528 - 8) * 4));
-		
+			
+			Platform trap6Mushroom1(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((208 - 8) * 4, (464 - 8) * 4));
+			Platform trap6Mushroom2(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((496 - 8) * 4, (496 - 8) * 4));
+			Platform trap6Mushroom3(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((512 - 8) * 4, (448 - 8) * 4));
+			Platform trap6Mushroom4(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((496 - 8) * 4, (400 - 8) * 4));
 
 			// BitMap Init
 			std::vector<Bitmap> block0;
@@ -455,7 +463,7 @@ int main()
 				{
 					if (outdoor[mapY][mapX] == 1)
 					{
-						Bitmap outdoor(nullptr, sf::Vector2f(((mapX) * 64) + 32, ((mapY) * 64) + 32), sf::Vector2f(64.f, 64.f));
+						Bitmap outdoor(nullptr, sf::Vector2f(((mapX) * 64.f) + 32.f, ((mapY) * 64.f) + 32.f), sf::Vector2f(64.f, 64.f));
 						block0.push_back(outdoor);
 					}
 				}
@@ -878,8 +886,52 @@ int main()
 				if (checkKey)
 				{
 					std::cout << "checkKey\n";
+					if (player.GetPosition().x > 176 * 4 && player.GetPosition().y < 496 * 4)
+						trap6_1 = true;
+					if (player.GetPosition().x > 480 * 4)
+					{
+						if (player.GetPosition().y < 496 * 4)
+							trap6_2 = true;					
+						if (player.GetPosition().y < 448 * 4)			
+							trap6_3 = true;			
+						if (player.GetPosition().y < 400 * 4)			
+							trap6_4 = true;			
+					}
+					if (player.GetGlobalBounds().intersects(trap6Mushroom1.GetGlobalBounds()))
+					{
+						// Draw die Mushroom
+					}
+					if (player.GetGlobalBounds().intersects(trap6Mushroom2.GetGlobalBounds()))
+					{
+						// Draw die Mushroom
+					}
+					if (player.GetGlobalBounds().intersects(trap6Mushroom3.GetGlobalBounds()))
+					{
+						// Draw die Mushroom
+					}
+					if (player.GetGlobalBounds().intersects(trap6Mushroom4.GetGlobalBounds()))
+					{
+						// Draw die Mushroom
+					}
+				}
+				if (trap6_1)
+				{
+					trap6Mushroom1.Draw(window);
+				}
+				if (trap6_2)
+				{
+					trap6Mushroom2.Draw(window);
+				}
+				if (trap6_3)
+				{
+					trap6Mushroom3.Draw(window);
+				}
+				if (trap6_4)
+				{
+					trap6Mushroom4.Draw(window);
 				}
 				
+
 				// DrawPlayer
 				player.Draw(window);
 				window.setView(view);
@@ -951,7 +1003,7 @@ int main()
 				{
 					if (outdoor[mapY][mapX] == 1)
 					{
-						Bitmap outdoor(nullptr, sf::Vector2f(((mapX) * 64) + 32, ((mapY) * 64) + 32), sf::Vector2f(64.f, 64.f));
+						Bitmap outdoor(nullptr, sf::Vector2f(((mapX) * 64.f) + 32.f, ((mapY) * 64.f) + 32.f), sf::Vector2f(64.f, 64.f));
 						block0.push_back(outdoor);
 					}
 				}
@@ -1059,7 +1111,7 @@ int main()
 				{
 					if (outdoor[mapY][mapX] == 1)
 					{
-						Bitmap outdoor(nullptr, sf::Vector2f(((mapX) * 90) + 45, ((mapY) * 90) + 45), sf::Vector2f(90.f, 90.f));
+						Bitmap outdoor(nullptr, sf::Vector2f(((mapX) * 90.f) + 45.f, ((mapY) * 90.f) + 45.f), sf::Vector2f(90.f, 90.f));
 						block0.push_back(outdoor);
 					}
 				}
@@ -1119,7 +1171,7 @@ int main()
 			showtime.str("");
 
 			// Set View
-			view.setCenter(windowWidth / 1.5, windowHight / 2);
+			view.setCenter(windowWidth / 1.5f, windowHight / 2.f);
 			std::cout << "Restart";
 
 			// Render
