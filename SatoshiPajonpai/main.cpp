@@ -80,6 +80,9 @@ int main()
 	sf::Texture TextDieMushroom;
 	TextDieMushroom.loadFromFile("assets/textImages/TextDieMushroom.png");
 
+	sf::Texture TextFIndKey;
+	TextFIndKey.loadFromFile("assets/textImages/TextFindKey.png");
+
 	//==========================================================================================================================================//
 	// Clock 
 
@@ -192,6 +195,9 @@ int main()
 		bool checkExitTrap2 = false;
 		bool checkTrap3 = false;
 		bool checkTrap3Pokeball = false;
+		bool checkTrap5 = false;
+		bool checkTrap5Pokeball = false;
+		bool checkTrap5ShowText = false;
 		bool checkKey = false;
 		
 		// state //
@@ -400,7 +406,9 @@ int main()
 		
 			Platform trap4stone1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (432 - 8) * 4));
 			Platform trap4stone2(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (448 - 8) * 4));
-
+			
+			Platform trap5Pokeball(&pokeballTexture, sf::Vector2f(64, 64), sf::Vector2f((64 - 8) * 4, (528 - 8) * 4));
+		
 
 			// BitMap Init
 			std::vector<Bitmap> block0;
@@ -505,7 +513,7 @@ int main()
 				stone1.Draw(window);
 				stone2.Draw(window);
 
-				// Trap 1
+				// Trap 1 Mushroom
 				if (!checkPokeballTrap1 && player.GetGlobalBounds().intersects(trap1Pokeball.GetGlobalBounds())) //Get Pokeball
 				{
 					Platform trap1TextKey(&foundKey, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
@@ -604,7 +612,7 @@ int main()
 					trap1Pokeball.Draw(window);
 				}
 				 
-				// Trap 2
+				// Trap 2 Stone Mushroom
 				if (!checkTrap2 && player.GetPosition().x > 432 * 4 && player.GetPosition().x < 448 * 4 && player.GetPosition().y > 368 * 4 && player.GetPosition().y < 400 * 4)
 				{
 					checkTrap2 = true;
@@ -678,7 +686,7 @@ int main()
 					}
 				}
 
-				// Trap 3
+				// Trap 3 Medicine
 				if (player.GetPosition().x > 48 * 4 && player.GetPosition().x < 100 * 4 && player.GetPosition().y > 416 * 4 && player.GetPosition().y < 480 * 4)
 				{
 					checkTrap3 = true;
@@ -692,7 +700,7 @@ int main()
 				
 					if (!checkTrap3Pokeball && player.GetGlobalBounds().intersects(trap3Pokeball.GetGlobalBounds()))
 					{
-						Platform trap1TextMedicine(&foundMedicine, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						Platform trap3TextMedicine(&foundMedicine, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
 						checkTrap3Pokeball = true;
 						//Text Get Drug
 						while (window.isOpen())
@@ -733,7 +741,7 @@ int main()
 							trap3stone1.Draw(window);
 							trap3stone2.Draw(window);
 							trap1Pokeball.Draw(window);
-							trap1TextMedicine.Draw(window);
+							trap3TextMedicine.Draw(window);
 							window.display();
 						}
 					}
@@ -793,7 +801,7 @@ int main()
 					trap3Pokeball.Draw(window);
 				}
 
-				// Trap 4
+				// Trap 4 stone
 				if (player.GetPosition().x > 432 * 4 && player.GetPosition().y > 416 * 4 && player.GetPosition().y < 448 * 4)
 				{
 					trap4stone1.GetCollider().CheckCollision(playerCollision, 1.0f);
@@ -802,10 +810,79 @@ int main()
 					trap4stone2.Draw(window);
 				}
 
+				// Trap 5 Key
+				if (player.GetPosition().x > 48 * 4 && player.GetPosition().x < 112 * 4 && player.GetPosition().y > 496 * 4)
+				{
+					
+					std::cout << "Trap5";
+					checkTrap5 = true;
+				}
+				if (checkTrap5)
+				{
+					if (!checkTrap5Pokeball)
+						trap5Pokeball.Draw(window);
+						
+					if (player.GetGlobalBounds().intersects(trap5Pokeball.GetGlobalBounds()))
+					{
+						checkTrap5Pokeball = true;
+						checkKey = true;
+					}
+				}
+				if (!checkTrap5ShowText && checkTrap5Pokeball)
+				{
+					checkTrap5ShowText = true;
+					Platform trap5TextKey(&foundKey, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					while (window.isOpen())
+					{
+						//Close Window//
+						sf::Event evnt;
+						while (window.pollEvent(evnt))
+						{
+							switch (evnt.type)
+							{
+							case sf::Event::Closed:
+								window.close();
+								break;
+							case sf::Event::Resized:
+								std::cout << "\Resized\n";
+								ResizeView(window, view);
+								break;
+							case sf::Event::KeyReleased:
+								if (evnt.key.code == sf::Keyboard::Return)
+									continueGame = true;
+								break;
+							}
+						}
+
+						if (continueGame)
+						{
+							std::cout << "Enter Click\n\n";
+
+							continueGame = false;
+							break;
+						}
+						window.clear();
+						Background2.Draw(window);
+						player.Draw(window);
+						stone1.Draw(window);
+						stone2.Draw(window);
+						trap1Pokeball.Draw(window);
+						trap3Pokeball.Draw(window);
+						window.setView(view);
+						trap5TextKey.Draw(window);
+						window.display();
+					}
+				}
+				
+				// Trap 6 checkKey
+				if (checkKey)
+				{
+					std::cout << "checkKey\n";
+				}
+				
 				// DrawPlayer
 				player.Draw(window);
 				window.setView(view);
-				door2.Draw(window);
 
 				// Goto State 1
 				if (player.GetGlobalBounds().intersects(door1.GetGlobalBounds()))
@@ -821,6 +898,7 @@ int main()
 				//Goto State 3
 				if (player.GetGlobalBounds().intersects(door2.GetGlobalBounds()))
 				{
+					Platform state3TextFindKey(&TextFIndKey, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
 					if (checkKey)
 					{
 						state = 3;
@@ -828,7 +906,7 @@ int main()
 					}
 					else
 					{
-						//printTEXT Find Key;
+						state3TextFindKey.Draw(window);
 					}
 					
 				}
