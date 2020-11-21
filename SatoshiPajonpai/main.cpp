@@ -12,6 +12,7 @@
 #include "Bitmap.h"
 #include "Restart.h"
 #include <sstream>
+#include "NPC.h"
 
 static const float VIEW_HEIGHT = 1000.0f;
 
@@ -23,6 +24,8 @@ void ResizeView(const sf::RenderWindow& window, sf::View& view)
 
 int long main()
 {
+	srand(time(NULL ));
+
 	//==========================================================================================================================================//
 	// Window Screen View
 
@@ -40,11 +43,13 @@ int long main()
 	playerTexture.loadFromFile("assets/textures/PerfectSprite.png");
 	Player player(&playerTexture, sf::Vector2u(4, 8), 0.5f, 100.0f);
 
+	//NPC
+	sf::Texture docterTexture;
+	docterTexture.loadFromFile("assets/textures/DocterSprite.png");
+	NPC Docter1(&docterTexture);
+
 	//==========================================================================================================================================//
 	// Texture
-
-	sf::Texture docterTexture;
-	docterTexture.loadFromFile("assets/textures/Docter.png");
 
 	sf::Texture pokeballTexture;
 	pokeballTexture.loadFromFile("assets/textures/pokeball.png");
@@ -180,7 +185,8 @@ int long main()
 	// State obj 
 
 	int state = 1;
-	int pexel = 16;
+	int pixel = 16;
+	int randData1;
 	int countDie = 0;
 	bool checkGameRestart = false;
 	bool restartGame = false;
@@ -256,7 +262,7 @@ int long main()
 			}
 
 			//Platform Init
-			Platform door(nullptr, sf::Vector2f(34.f, 2.f), sf::Vector2f(113.f * 64 / 16, 255.f * 64 / 16));
+			Platform door(nullptr, sf::Vector2f(34.f, 10.f), sf::Vector2f(113.f * 64 / 16, 255.f * 64 / 16));
 			Platform die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((16 * 7) * 4 - 23, 16 * 11 * 4));
 
 			//Run Game
@@ -1112,7 +1118,6 @@ int long main()
 					trap6Mushroom4.Draw(window);
 				}
 				
-
 				// DrawPlayer
 				player.Draw(window);
 				window.setView(view);
@@ -1158,7 +1163,8 @@ int long main()
 		else if (state == 3)
 		{
 			// Set Position
-			player.SetPosition((112-8) * 4, (144-8) * 4);
+			player.SetPosition((128 - 8) * 4, 522);
+			Docter1.SetPosition((128-8) * 4, (80 -8) * 4);
 
 			// Background
 			sf::Texture backgroundState5Texture;
@@ -1196,6 +1202,9 @@ int long main()
 			// Run Game
 			while (window.isOpen())
 			{
+				// Random
+				randData1 = rand();
+
 				// DeltaTime
 				deltaTime = clock.restart().asSeconds();
 
@@ -1217,11 +1226,32 @@ int long main()
 				
 				// Player Update
 				player.Update(deltaTime);
+				Docter1.Update(randData1);
+				
 
 				// BitMap Collision
 				Collider playerCollision = player.GetCollider();
 				for (int i = 0; i < block0.size(); i++)
 					block0[i].getCollider().CheckCollision(playerCollision, 1.0f);
+				Docter1.GetCollider().CheckCollision(playerCollision, 1.0f);
+
+				//Window Collision
+				if (player.GetPosition().x < 0 + 29)
+				{
+					player.SetPosition(29, player.GetPosition().y);
+				}
+				if (player.GetPosition().y < 0 + 47)
+				{
+					player.SetPosition(player.GetPosition().x, 47);
+				}
+				if (player.GetPosition().x + 29 > 224 * 64 / 16)
+				{
+					player.SetPosition(224 * 64 / 16 - 29, player.GetPosition().y);
+				}
+				if (player.GetPosition().y + 47 > 160 * 64 / 16)
+				{
+					player.SetPosition(player.GetPosition().x, 160 * 64 / 16 - 47);
+				}
 
 				// Draw
 				view.setCenter(player.GetPosition());
@@ -1229,6 +1259,7 @@ int long main()
 				window.clear();
 				Background3.Draw(window);
 				player.Draw(window);
+				Docter1.Draw(window);
 				window.setView(view);
 
 				window.display();

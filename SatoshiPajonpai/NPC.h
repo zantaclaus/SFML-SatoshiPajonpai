@@ -1,28 +1,27 @@
 #pragma once
 #include<SFML/Graphics.hpp>
-#include "Animation.h"
+#include<time.h>
 #include "Collider.h"
 
-class Player
+class NPC
 {
 public:
-	Player(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed);
-	~Player();
+	NPC(sf::Texture* texture);
+	~NPC();
 
-	void Update(float deltatime);
+	void Update(int randomData);
 	void Draw(sf::RenderWindow& window);
 	void SetPosition(float x, float y);
 
 	sf::FloatRect GetGlobalBounds() { return body.getGlobalBounds(); }
 	sf::Vector2f GetPosition() { return body.getPosition(); }
 	Collider GetCollider() { return Collider(body); }
-	sf::RectangleShape body;
-
+	
+	sf::Clock NPCClock;
 
 private:
-	Animation animation;
-	unsigned int row;
-	unsigned int stop;
-	float speed;
-
+	int spriteSizeX;
+	int spriteSizeY;
+	int animationFrame = 0;
+	sf::RectangleShape body;
 };
