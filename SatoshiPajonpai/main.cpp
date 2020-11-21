@@ -52,6 +52,9 @@ int long main()
 	sf::Texture dieTexture;
 	dieTexture.loadFromFile("assets/textures/die.png");
 
+	sf::Texture dieUpTexture;
+	dieUpTexture.loadFromFile("assets/textures/dieUp.png");
+
 	sf::Texture BlackTexture;
 	BlackTexture.loadFromFile("assets/textures/Black.jpg");
 
@@ -176,8 +179,8 @@ int long main()
 	//==========================================================================================================================================// 
 	// State obj 
 
-	int pexel = 16;
 	int state = 1;
+	int pexel = 16;
 	int countDie = 0;
 	bool checkGameRestart = false;
 	bool restartGame = false;
@@ -388,6 +391,12 @@ int long main()
 			// Platform init
 			Platform trap1Die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((16 - 8) * 4, (368 - 8) * 4));
 			Platform trap2Die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((368 - 8) * 4, (368 - 8) * 4));
+
+			Platform trap3Die(&dieUpTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((208 - 8) * 4, (464 - 8) * 4));
+			Platform trap4Die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((496 - 8) * 4, (496 - 8) * 4));
+			Platform trap5Die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((512 - 8) * 4, (448 - 8) * 4));
+			Platform trap6Die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((496 - 8) * 4, (400 - 8) * 4));
+
 			Platform door1(nullptr, sf::Vector2f(64, 64), sf::Vector2f(576, 751 - 70));
 			Platform door2(nullptr, sf::Vector2f(15*4, 15*4), sf::Vector2f(500.5*4, 320*4));
 			Platform stone1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((16 - 8) * 4, (416 - 8) * 4));
@@ -887,31 +896,203 @@ int long main()
 				{
 					std::cout << "checkKey\n";
 					if (player.GetPosition().x > 176 * 4 && player.GetPosition().y < 496 * 4)
+					{
 						trap6_1 = true;
+					}			
 					if (player.GetPosition().x > 480 * 4)
 					{
-						if (player.GetPosition().y < 496 * 4)
-							trap6_2 = true;					
-						if (player.GetPosition().y < 448 * 4)			
-							trap6_3 = true;			
-						if (player.GetPosition().y < 400 * 4)			
-							trap6_4 = true;			
+						if (player.GetPosition().y < 529 * 4)
+							trap6_2 = true;
+						if (player.GetPosition().y < 480 * 4)
+							trap6_3 = true;
+						if (player.GetPosition().y < 432 * 4)
+							trap6_4 = true;
 					}
+
+					// Die
 					if (player.GetGlobalBounds().intersects(trap6Mushroom1.GetGlobalBounds()))
 					{
-						// Draw die Mushroom
+						Platform TextDieMushroomTrap1(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						//Die
+						std::cout << "\nDIE\n";
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										restartGame = true;
+									break;
+								}
+							}
+							//Goto Restart//
+							if (restartGame)
+							{
+								std::cout << "xxxx\n\n";
+								break;
+							}
+							//Render Window//
+							window.clear();
+							Background2.Draw(window);
+							stone1.Draw(window);
+							stone2.Draw(window);
+							trap1Pokeball.Draw(window);
+							trap3Pokeball.Draw(window);
+							trap3Die.Draw(window);
+							TextDieMushroomTrap1.Draw(window);
+							window.setView(view);
+							window.display();
+						}
 					}
-					if (player.GetGlobalBounds().intersects(trap6Mushroom2.GetGlobalBounds()))
+					if (player.GetPosition().x > 480 * 4 && player.GetPosition().x < 496 * 4 && player.GetPosition().y > 480 * 4 && player.GetPosition().y < 496 * 4)
 					{
-						// Draw die Mushroom
+						Platform TextDieMushroomTrap1(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						//Die
+						std::cout << "\nDIE\n";
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										restartGame = true;
+									break;
+								}
+							}
+							//Goto Restart//
+							if (restartGame)
+							{
+								std::cout << "xxxx\n\n";
+								break;
+							}
+							//Render Window//
+							window.clear();
+							Background2.Draw(window);
+							stone1.Draw(window);
+							stone2.Draw(window);
+							trap1Pokeball.Draw(window);
+							trap3Pokeball.Draw(window);
+							trap4Die.Draw(window);
+							TextDieMushroomTrap1.Draw(window);
+
+							window.setView(view);
+							window.display();
+						}
 					}
-					if (player.GetGlobalBounds().intersects(trap6Mushroom3.GetGlobalBounds()))
+					if (player.GetPosition().x > 496 * 4 && player.GetPosition().x < 512 * 4 && player.GetPosition().y > 432 * 4 && player.GetPosition().y < 448 * 4)
 					{
-						// Draw die Mushroom
+						Platform TextDieMushroomTrap1(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						//Die
+						std::cout << "\nDIE\n";
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										restartGame = true;
+									break;
+								}
+							}
+							//Goto Restart//
+							if (restartGame)
+							{
+								std::cout << "xxxx\n\n";
+								break;
+							}
+							//Render Window//
+							window.clear();
+							Background2.Draw(window);
+							stone1.Draw(window);
+							stone2.Draw(window);
+							trap1Pokeball.Draw(window);
+							trap3Pokeball.Draw(window);
+							trap5Die.Draw(window);
+							TextDieMushroomTrap1.Draw(window);
+							trap6Mushroom2.Draw(window);
+							window.setView(view);
+							window.display();
+						}
 					}
-					if (player.GetGlobalBounds().intersects(trap6Mushroom4.GetGlobalBounds()))
+					if (player.GetPosition().x > 480 * 4 && player.GetPosition().x < 496 * 4 && player.GetPosition().y > 384 * 4 && player.GetPosition().y < 400 * 4)
 					{
-						// Draw die Mushroom
+						Platform TextDieMushroomTrap1(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						//Die
+						std::cout << "\nDIE\n";
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										restartGame = true;
+									break;
+								}
+							}
+							//Goto Restart//
+							if (restartGame)
+							{
+								std::cout << "xxxx\n\n";
+								break;
+							}
+							//Render Window//
+							window.clear();
+							Background2.Draw(window);
+							stone1.Draw(window);
+							stone2.Draw(window);
+							trap1Pokeball.Draw(window);
+							trap3Pokeball.Draw(window);
+							trap6Die.Draw(window);			
+							trap6Mushroom2.Draw(window);
+							trap6Mushroom3.Draw(window);
+							TextDieMushroomTrap1.Draw(window);
+							window.setView(view);
+							window.display();
+						}
 					}
 				}
 				if (trap6_1)
@@ -976,6 +1157,9 @@ int long main()
 		}
 		else if (state == 3)
 		{
+			// Set Position
+			player.SetPosition((112-8) * 4, (144-8) * 4);
+
 			// Background
 			sf::Texture backgroundState5Texture;
 			backgroundState5Texture.loadFromFile("assets/maps/Map3.png");
@@ -1054,68 +1238,10 @@ int long main()
 		{
 			//Background
 			sf::Texture backgroundState5Texture;
-			backgroundState5Texture.loadFromFile("state5.png");
-			Platform Box1(&backgroundState5Texture, sf::Vector2f(768 * 90 / 16, 704 * 90 / 16), sf::Vector2f(768 * 90 / 32, 704 * 90 / 32));
-			std::vector<Bitmap> block0;
-			int outdoor[44][48] = {
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			};
+			backgroundState5Texture.loadFromFile("assets/maps/Map5.png");
+			Platform Box1(&backgroundState5Texture, sf::Vector2f(1200 * 90 / 16, 800 * 90 / 16), sf::Vector2f(1200 * 90 / 32, 800 * 90 / 32));
 
-			//DrawMap
-			for (int mapX = 0; mapX < 48; mapX++)
-			{
-				for (int mapY = 0; mapY < 44; mapY++)
-				{
-					if (outdoor[mapY][mapX] == 1)
-					{
-						Bitmap outdoor(nullptr, sf::Vector2f(((mapX) * 90.f) + 45.f, ((mapY) * 90.f) + 45.f), sf::Vector2f(90.f, 90.f));
-						block0.push_back(outdoor);
-					}
-				}
-			}
+	
 
 			//Run Game
 			player.SetPosition(1300, 3290);
@@ -1140,10 +1266,7 @@ int long main()
 					}
 				}
 
-				//Collider
-				Collider playerCollision = player.GetCollider();
-				for (int i = 0; i < block0.size(); i++)
-					block0[i].getCollider().CheckCollision(playerCollision, 1.0f);
+
 
 				//Draw
 				player.Update(deltaTime);
