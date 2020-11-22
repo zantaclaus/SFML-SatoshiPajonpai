@@ -91,6 +91,9 @@ int long main()
 	sf::Texture TextFIndKey;
 	TextFIndKey.loadFromFile("assets/textImages/TextFindKey.png");
 
+	sf::Texture TextTalkToDocter;
+	TextTalkToDocter.loadFromFile("assets/textImages/TextToTalkDocter.png");
+
 	//==========================================================================================================================================//
 	// Clock 
 
@@ -184,7 +187,7 @@ int long main()
 	//==========================================================================================================================================// 
 	// State obj 
 
-	int state = 1;
+	int state = 3;
 	int pixel = 16;
 	int randData1;
 	int countDie = 0;
@@ -213,7 +216,7 @@ int long main()
 		bool trap6_3 = false;
 		bool trap6_4 = false;
 		
-		// state //
+		// Maps State //
 		if (state == 1)
 		{
 			//Player Position
@@ -1164,11 +1167,11 @@ int long main()
 		{
 			// Set Position
 			player.SetPosition((128 - 8) * 4, 522);
-			Docter1.SetPosition((128-8) * 4, (80 -8) * 4);
+			Docter1.SetPosition((128-8) * 4, (80 -8) * 4 - 25);
 
 			// Background
 			sf::Texture backgroundState5Texture;
-			backgroundState5Texture.loadFromFile("assets/maps/Map3.png");
+			backgroundState5Texture.loadFromFile("assets/maps/Map3.2.png");
 			Platform Background3(&backgroundState5Texture, sf::Vector2f(224 * 64 / 16, 160 * 64 / 16), sf::Vector2f(224 * 64 / 32, 160 * 64 / 32));
 
 			// BitMap Init
@@ -1199,6 +1202,9 @@ int long main()
 				}
 			}
 
+			// Platform init
+			Platform floorDocter(nullptr, sf::Vector2f(1.f, 80.f), sf::Vector2f((128 - 8) * 4, (80 - 8) * 4 - 20));
+			
 			// Run Game
 			while (window.isOpen())
 			{
@@ -1228,12 +1234,10 @@ int long main()
 				player.Update(deltaTime);
 				Docter1.Update(randData1);
 				
-
 				// BitMap Collision
 				Collider playerCollision = player.GetCollider();
 				for (int i = 0; i < block0.size(); i++)
 					block0[i].getCollider().CheckCollision(playerCollision, 1.0f);
-				Docter1.GetCollider().CheckCollision(playerCollision, 1.0f);
 
 				//Window Collision
 				if (player.GetPosition().x < 0 + 29)
@@ -1253,6 +1257,10 @@ int long main()
 					player.SetPosition(player.GetPosition().x, 160 * 64 / 16 - 47);
 				}
 
+				//NPC Collision
+				Docter1.GetCollider().CheckCollision(playerCollision, 1.0f);
+				
+
 				// Draw
 				view.setCenter(player.GetPosition());
 				std::cout << "x = " << player.GetPosition().x << " y = " << player.GetPosition().y << std::endl;
@@ -1260,8 +1268,15 @@ int long main()
 				Background3.Draw(window);
 				player.Draw(window);
 				Docter1.Draw(window);
-				window.setView(view);
+				
 
+				if (floorDocter.GetGlobalBounds().intersects(player.GetGlobalBounds()))
+				{
+					Platform TalkToDocter(&TextTalkToDocter, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					TalkToDocter.Draw(window);
+				}
+
+				window.setView(view);
 				window.display();
 			}
 		}
@@ -1313,7 +1328,7 @@ int long main()
 			}
 		}
 
-		// restart //
+		// Restart //
 		if (restartGame)
 		{
 			// Count Die
