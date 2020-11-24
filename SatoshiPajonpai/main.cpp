@@ -72,6 +72,9 @@ int long main()
 	sf::Texture mushroomTexture;
 	mushroomTexture.loadFromFile("assets/textures/Mushroom.png");
 
+	sf::Texture DocterDown;
+	DocterDown.loadFromFile("assets/textures/DocterDown.png");
+
 	// TextImage
 	sf::Texture foundKey;
 	foundKey.loadFromFile("assets/textImages/TextKey.png");
@@ -93,6 +96,12 @@ int long main()
 
 	sf::Texture TextTalkToDocter;
 	TextTalkToDocter.loadFromFile("assets/textImages/TextToTalkDocter.png");
+
+	sf::Texture TalkWithDocter;
+	TalkWithDocter.loadFromFile("assets/textImages/TextToWithDocter1.png");
+
+	sf::Texture TextDoorLocked;
+	TextDoorLocked.loadFromFile("assets/textImages/TextDoorLocked.png");
 
 	//==========================================================================================================================================//
 	// Clock 
@@ -187,7 +196,7 @@ int long main()
 	//==========================================================================================================================================// 
 	// State obj 
 
-	int state = 3;
+	int state = 1;
 	int pixel = 16;
 	int randData1;
 	int countDie = 0;
@@ -202,7 +211,7 @@ int long main()
 	while (true)
 	{
 		// status state //
-		bool checkPokeballTrap1 = false;
+		bool checkPokeballTrap1 = false; //-----> state 2
 		bool checkTrap2 = false;
 		bool checkExitTrap2 = false;
 		bool checkTrap3 = false;
@@ -215,6 +224,9 @@ int long main()
 		bool trap6_2 = false;
 		bool trap6_3 = false;
 		bool trap6_4 = false;
+
+		bool state4_CheckTrap1 = false;
+
 		
 		// Maps State //
 		if (state == 1)
@@ -266,7 +278,7 @@ int long main()
 
 			//Platform Init
 			Platform door(nullptr, sf::Vector2f(34.f, 10.f), sf::Vector2f(113.f * 64 / 16, 255.f * 64 / 16));
-			Platform die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((16 * 7) * 4 - 23, 16 * 11 * 4));
+			Platform die(&dieTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f((16 * 7) * 4 - 23, 16 * 11 * 4));
 
 			//Run Game
 			while (window.isOpen())
@@ -391,20 +403,20 @@ int long main()
 		{		
 			// Set Position
 			player.SetPosition(576, 751);
-
+		
 			// Background
 			sf::Texture backgroundState5Texture;
 			backgroundState5Texture.loadFromFile("assets/maps/Map2.png");
 			Platform Background2(&backgroundState5Texture, sf::Vector2f(576 * 64 / 16, 529 * 64 / 16), sf::Vector2f(576 * 64 / 32, 529 * 64 / 32));
 
 			// Platform init
-			Platform trap1Die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((16 - 8) * 4, (368 - 8) * 4));
-			Platform trap2Die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((368 - 8) * 4, (368 - 8) * 4));
+			Platform trap1Die(&dieTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f((16 - 8) * 4, (368 - 8) * 4));
+			Platform trap2Die(&dieTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f((368 - 8) * 4, (368 - 8) * 4));
 
-			Platform trap3Die(&dieUpTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((208 - 8) * 4, (464 - 8) * 4));
-			Platform trap4Die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((496 - 8) * 4, (496 - 8) * 4));
-			Platform trap5Die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((512 - 8) * 4, (448 - 8) * 4));
-			Platform trap6Die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f((496 - 8) * 4, (400 - 8) * 4));
+			Platform trap3Die(&dieUpTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f((208 - 8) * 4, (464 - 8) * 4));
+			Platform trap4Die(&dieUpTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f((496 - 8) * 4, (496 - 8) * 4));
+			Platform trap5Die(&dieUpTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f((512 - 8) * 4, (448 - 8) * 4));
+			Platform trap6Die(&dieUpTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f((496 - 8) * 4, (400 - 8) * 4));
 
 			Platform door1(nullptr, sf::Vector2f(64, 64), sf::Vector2f(576, 751 - 70));
 			Platform door2(nullptr, sf::Vector2f(15*4, 15*4), sf::Vector2f(500.5*4, 320*4));
@@ -774,7 +786,7 @@ int long main()
 					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
 					{
 						Platform TextDieMedicineTrap3(&TextDieMedicine, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
-						Platform trap3Die(&dieTexture, sf::Vector2f(58.f * 2, 94.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y));
+						Platform trap3Die(&dieTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y));
 						//Die
 						std::cout << "\nDIE\n";
 						while (window.isOpen())
@@ -1203,7 +1215,8 @@ int long main()
 			}
 
 			// Platform init
-			Platform floorDocter(nullptr, sf::Vector2f(1.f, 80.f), sf::Vector2f((128 - 8) * 4, (80 - 8) * 4 - 20));
+			Platform floorDocter(nullptr, sf::Vector2f(5.f, 80.f), sf::Vector2f((128 - 8) * 4, (80 - 8) * 4 - 20));
+			Platform door(nullptr, sf::Vector2f(32.f * 4 - 20,  20.f), sf::Vector2f((112) * 4, (160) * 4));
 			
 			// Run Game
 			while (window.isOpen())
@@ -1260,6 +1273,12 @@ int long main()
 				//NPC Collision
 				Docter1.GetCollider().CheckCollision(playerCollision, 1.0f);
 				
+				//Goto State 4
+				if (player.GetGlobalBounds().intersects(door.GetGlobalBounds()))
+				{
+					state = 4;
+					break;
+				}
 
 				// Draw
 				view.setCenter(player.GetPosition());
@@ -1268,14 +1287,193 @@ int long main()
 				Background3.Draw(window);
 				player.Draw(window);
 				Docter1.Draw(window);
-				
-
+	
+				//Docter Text to Talk
 				if (floorDocter.GetGlobalBounds().intersects(player.GetGlobalBounds()))
 				{
 					Platform TalkToDocter(&TextTalkToDocter, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					Platform DocterAtHome(&DocterDown, sf::Vector2f(64, 80), sf::Vector2f((128 - 8) * 4, (80 - 8) * 4 - 25));
 					TalkToDocter.Draw(window);
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+					{
+						Platform BoxTalkWithDocter1(&TalkWithDocter, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						while (1)
+						{
+							// Close Window
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								}
+							}
+							if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+							{
+								break;
+							}
+
+							Background3.Draw(window);
+							DocterAtHome.Draw(window);
+							player.Draw(window);
+							BoxTalkWithDocter1.Draw(window);
+
+							window.setView(view);
+							window.display();
+						}
+					}
 				}
 
+				window.setView(view);
+				window.display();
+			}
+		}
+		else if (state == 4)
+		{
+			// Set Position
+			player.SetPosition((512 - 8) * 4, (352 - 8) * 4);
+
+			// Background
+			sf::Texture backgroundState5Texture;
+			backgroundState5Texture.loadFromFile("assets/maps/Map2.png");
+			Platform Background2(&backgroundState5Texture, sf::Vector2f(576 * 64 / 16, 529 * 64 / 16), sf::Vector2f(576 * 64 / 32, 529 * 64 / 32));
+
+			// BitMap Init
+			std::vector<Bitmap> block0;
+			int outdoor[33][36] = {
+									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1},
+									{0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1},
+									{0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1},
+									{0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0},
+									{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+									{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+									{0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0},
+									{0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+									{0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+									{0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0},
+									{0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0},
+									{0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0},
+									{0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+									{0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+			};
+
+			// DrawBitMap
+			for (int mapX = 0; mapX < 36; mapX++)
+			{
+				for (int mapY = 0; mapY < 33; mapY++)
+				{
+					if (outdoor[mapY][mapX] == 1)
+					{
+						Bitmap outdoor(nullptr, sf::Vector2f(((mapX) * 64.f) + 32.f, ((mapY) * 64.f) + 32.f), sf::Vector2f(64.f, 64.f));
+						block0.push_back(outdoor);
+					}
+				}
+			}
+
+			// Platform init
+			Platform door1(nullptr, sf::Vector2f(64, 64), sf::Vector2f(576, 751 - 70));
+			Platform door2(nullptr, sf::Vector2f(15 * 4, 15 * 4), sf::Vector2f(500.5 * 4, 320 * 4));
+
+			Platform trap1Stone1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (512 - 8) * 4));
+			Platform trap1Stone2(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (528 - 8) * 4));
+
+			while (window.isOpen())
+			{
+				// DeltaTime
+				deltaTime = clock.restart().asSeconds();
+
+				// Close Window
+				sf::Event evnt;
+				while (window.pollEvent(evnt))
+				{
+					switch (evnt.type)
+					{
+					case sf::Event::Closed:
+						window.close();
+						break;
+					case sf::Event::Resized:
+						std::cout << "\Resized\n";
+						ResizeView(window, view);
+						break;
+					}
+				}
+
+				// Player Update
+				player.Update(deltaTime);
+
+				// Window Collision
+				if (player.GetPosition().x < 0 + 29)
+				{
+					player.SetPosition(29, player.GetPosition().y);
+				}
+				if (player.GetPosition().y + 46 > 529 * 64 / 16)
+				{
+					player.SetPosition(player.GetPosition().x, 529 * 64 / 16 - 46);
+				}
+
+				// BitMap Collisio n
+				Collider playerCollision = player.GetCollider();
+				for (int i = 0; i < block0.size(); i++)
+					block0[i].getCollider().CheckCollision(playerCollision, 1.0f);
+
+				//Platform Collision  
+
+
+				// DrawBackground
+				view.setCenter(player.GetPosition());
+				std::cout << "x = " << player.GetPosition().x << " y = " << player.GetPosition().y << std::endl;
+				window.clear();
+				Background2.Draw(window);
+				
+				// DrawPlayer
+				player.Draw(window);
+				
+				//Trap1
+				if (player.GetPosition().x < 448 * 4 && player.GetPosition().y > 496)
+				{
+					state4_CheckTrap1 = true;
+				}
+				if (state4_CheckTrap1)
+				{
+					trap1Stone1.GetCollider().CheckCollision(playerCollision, 1.0f);
+					trap1Stone2.GetCollider().CheckCollision(playerCollision, 1.0f);
+					trap1Stone1.Draw(window);
+					trap1Stone2.Draw(window);
+				}
+
+				// Door1 && Door2 Collision
+				if (player.GetGlobalBounds().intersects(door1.GetGlobalBounds()) || player.GetGlobalBounds().intersects(door2.GetGlobalBounds()))
+				{
+					Platform DoorLocked(&TextDoorLocked, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					DoorLocked.Draw(window);
+				}
+
+				//Window Display
 				window.setView(view);
 				window.display();
 			}
