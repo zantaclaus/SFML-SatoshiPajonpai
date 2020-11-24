@@ -196,7 +196,7 @@ int long main()
 	//==========================================================================================================================================// 
 	// State obj 
 
-	int state = 1;
+	int state = 4;
 	int pixel = 16;
 	int randData1;
 	int countDie = 0;
@@ -551,7 +551,7 @@ int long main()
 				stone1.Draw(window);
 				stone2.Draw(window);
 
-				// Trap 1 Mushroom
+				// Trap 1 Mushroom -----> Die
 				if (!checkPokeballTrap1 && player.GetGlobalBounds().intersects(trap1Pokeball.GetGlobalBounds())) //Get Pokeball
 				{
 					Platform trap1TextKey(&foundKey, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
@@ -1399,8 +1399,12 @@ int long main()
 			Platform door1(nullptr, sf::Vector2f(64, 64), sf::Vector2f(576, 751 - 70));
 			Platform door2(nullptr, sf::Vector2f(15 * 4, 15 * 4), sf::Vector2f(500.5 * 4, 320 * 4));
 
+			Platform trap1_Die(&dieUpTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f((240 - 8) * 4, (464 - 8) * 4));
+
 			Platform trap1Stone1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (512 - 8) * 4));
 			Platform trap1Stone2(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (528 - 8) * 4));
+			Platform trap1Stone3(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((256 - 8) * 4, (464 - 8) * 4));
+			Platform trap1Mushroom(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((240 - 8) * 4, (464 - 8) * 4));
 
 			while (window.isOpen())
 			{
@@ -1454,7 +1458,7 @@ int long main()
 				player.Draw(window);
 				
 				//Trap1
-				if (player.GetPosition().x < 448 * 4 && player.GetPosition().y > 496)
+				if (player.GetPosition().x < 448 * 4 && player.GetPosition().x > 400 * 4 && player.GetPosition().y > 496 * 4)
 				{
 					state4_CheckTrap1 = true;
 				}
@@ -1464,6 +1468,56 @@ int long main()
 					trap1Stone2.GetCollider().CheckCollision(playerCollision, 1.0f);
 					trap1Stone1.Draw(window);
 					trap1Stone2.Draw(window);
+
+					trap1Stone2.GetCollider().CheckCollision(playerCollision, 1.0f);
+					trap1Stone3.Draw(window);
+					trap1Mushroom.Draw(window);
+					if (player.GetGlobalBounds().intersects(trap1Mushroom.GetGlobalBounds()))
+					{
+						while (window.isOpen())
+						{
+							Platform TextDieMushroomTrap1(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+							//Die
+							std::cout << "\nDIE\n";
+							while (window.isOpen())
+							{
+								//Close Window//
+								sf::Event evnt;
+								while (window.pollEvent(evnt))
+								{
+									switch (evnt.type)
+									{
+									case sf::Event::Closed:
+										window.close();
+										break;
+									case sf::Event::Resized:
+										std::cout << "\Resized\n";
+										ResizeView(window, view);
+										break;
+									case sf::Event::KeyReleased:
+										if (evnt.key.code == sf::Keyboard::Return)
+											restartGame = true;
+										break;
+									}
+								}
+
+								if (restartGame)
+								{
+									std::cout << "xxxx\n\n";
+									break;
+								}
+								window.clear();
+								Background2.Draw(window);
+								trap1_Die.Draw(window);
+								trap1Stone1.Draw(window);
+								trap1Stone2.Draw(window);
+								trap1Stone3.Draw(window);
+								TextDieMushroomTrap1.Draw(window);
+								window.setView(view);
+								window.display();
+							}
+						}
+					}
 				}
 
 				// Door1 && Door2 Collision
