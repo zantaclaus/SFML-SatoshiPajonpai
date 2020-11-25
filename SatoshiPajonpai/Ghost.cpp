@@ -1,40 +1,66 @@
 #include "Ghost.h"
 
-
-Ghost::Ghost(sf::Texture* texture, int randomData,float sizeX, float sizeY)
+Ghost::Ghost(sf::Texture * texture, int randomData, Platform * platform, float sizeX, float sizeY)
 {
 	body.setSize(sf::Vector2f(sizeX, sizeY));
 	body.setOrigin(body.getSize() / 2.0f);
 	body.setTexture(texture);
-	
+
 	spriteSizeX = texture->getSize().x / 4;
 	spriteSizeY = texture->getSize().y / 4;
 	body.setTextureRect(sf::IntRect(0, 0, sizeX, sizeY));
-	
+
 	direction = randomData;
+	direction = direction % 4;
+
+	if (direction == 0) // Top
+	{
+		float x = rand() % (int(platform->getSize().x) - 10) + 10;
+		body.setPosition(x, 0);
+	}
+	if (direction == 1) // Right
+	{
+		int y = rand() % (int(platform->getSize().x) - 10) + 10;
+		body.setPosition(platform->getSize().y, y);
+	}
+	if (direction == 2) // Left
+	{
+		int y = rand() % (int(platform->getSize().x) - 10) + 10;
+		body.setPosition(0, y);
+	}
+	if (direction == 3) // Bottom
+	{
+		int x = rand() % (int(platform->getSize().x) - 10) + 10;
+		body.setPosition(x, platform->getSize().x);
+	}
 }
 
-Ghost::~Ghost()
+	Ghost::~Ghost()
 {
 }
 
 void Ghost::Update()
 {
-	if (direction % 4 == 0)
+	if (direction == 0) // Top
 	{
-		body.setTextureRect(sf::IntRect(spriteSizeX , spriteSizeY * 0, spriteSizeX, spriteSizeY));
+		
+		body.move(0.f, 5.f);
+		body.setTextureRect(sf::IntRect(spriteSizeX * animationFrame, spriteSizeY * 0, spriteSizeX, spriteSizeY));
 	}
-	if (direction % 4 == 1)
+	if (direction== 1) // Right
 	{
-		body.setTextureRect(sf::IntRect(spriteSizeX , spriteSizeY * 1, spriteSizeX, spriteSizeY));
+		body.move(-5.f, 0.f);
+		body.setTextureRect(sf::IntRect(spriteSizeX * animationFrame, spriteSizeY * 1, spriteSizeX, spriteSizeY));
 	}
-	if (direction % 4 == 2)
+	if (direction == 2) // Left
 	{
-		body.setTextureRect(sf::IntRect(spriteSizeX , spriteSizeY * 2, spriteSizeX, spriteSizeY));
+		body.move(5.f, 0.f);
+		body.setTextureRect(sf::IntRect(spriteSizeX * animationFrame, spriteSizeY * 2, spriteSizeX, spriteSizeY));
 	}
-	if (direction % 4 == 3)
+	if (direction == 3) // Bottom
 	{
-		body.setTextureRect(sf::IntRect(spriteSizeX , spriteSizeY * 3, spriteSizeX, spriteSizeY));
+		body.move(0.f, -5.f);
+		body.setTextureRect(sf::IntRect(spriteSizeX * animationFrame, spriteSizeY * 3, spriteSizeX, spriteSizeY));
 	}
 	animationFrame++;
 

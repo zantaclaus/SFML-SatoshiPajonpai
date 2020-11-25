@@ -13,6 +13,7 @@
 #include "Restart.h"
 #include <sstream>
 #include "NPC.h"
+#include "Ghost.h"
 
 static const float VIEW_HEIGHT = 1000.0f;
 
@@ -47,6 +48,11 @@ int long main()
 	sf::Texture docterTexture;
 	docterTexture.loadFromFile("assets/textures/DocterSprite.png");
 	NPC Docter1(&docterTexture);
+
+	//Ghost 
+	sf::Texture GengarTexture; 
+	GengarTexture.loadFromFile("assets/textures/Gengar.png");
+	std::vector <Ghost*> Gengar;
 
 	//==========================================================================================================================================//
 	// Texture
@@ -202,7 +208,7 @@ int long main()
 	//==========================================================================================================================================// 
 	// State obj 
 
-	int state = 3;
+	int state = 1;
 	int pixel = 16;
 	int randData1;
 	int countDie = 0;
@@ -210,6 +216,8 @@ int long main()
 	bool restartGame = false;
 	bool continueGame = false;
 	bool checkstate1_out = false;
+
+	
 
 	//==========================================================================================================================================// 
 	// Run Game
@@ -237,18 +245,24 @@ int long main()
 		// Maps State //
 		if (state == 1)
 		{
+			// Background
+			sf::Texture backgroundState5Texture;
+			backgroundState5Texture.loadFromFile("assets/maps/Map1.png");
+			Platform Background1(&backgroundState5Texture, sf::Vector2f(224 * 64 / 16, 256 * 64 / 16), sf::Vector2f(224 * 64 / 32, 256 * 64 / 32));
+
 			//Player Position
 			if (checkstate1_out)
 				player.SetPosition(104 * 4, 216 * 4);
 			else
 				player.SetPosition(426, 427);
 
-			//Background
-			sf::Texture backgroundState5Texture;
-			backgroundState5Texture.loadFromFile("assets/maps/Map1.png");
-			Platform Background1(&backgroundState5Texture, sf::Vector2f(224 * 64 / 16, 256 * 64 / 16), sf::Vector2f(224 * 64 / 32, 256 * 64 / 32));
+			// Ganger init
+			Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background1, 82.f, 80.f));
+			Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background1, 82.f, 80.f));
+			Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background1, 82.f, 80.f));
+			Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background1, 82.f, 80.f));
 
-			//BitMap Init
+			// BitMap Init
 			std::vector<Bitmap> block0;
 			int outdoor[16][14] = {
 									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
@@ -269,7 +283,7 @@ int long main()
 									{1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1 },
 			};
 
-			//DrawBitMap
+			// DrawBitMap
 			for (int mapX = 0; mapX < 14; mapX++)
 			{
 				for (int mapY = 0; mapY < 16; mapY++)
@@ -281,14 +295,15 @@ int long main()
 					}
 				}
 			}
-
-			//Platform Init
+			 
+			// Platform Init
 			Platform door(nullptr, sf::Vector2f(34.f, 10.f), sf::Vector2f(113.f * 64 / 16, 255.f * 64 / 16));
 			Platform die(&dieTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f((16 * 7) * 4 - 23, 16 * 11 * 4));
 
-			//Run Game
+			// Run Game
 			while (window.isOpen())
 			{
+
 				//deltaTime//
 				deltaTime = clock.restart().asSeconds();
 
@@ -310,6 +325,8 @@ int long main()
 
 				//Player Update
 				player.Update(deltaTime);
+				for (auto* i : Gengar)
+					i->Update();
 
 				//BitMap Collision
 				Collider playerCollision = player.GetCollider();
@@ -340,6 +357,8 @@ int long main()
 				window.clear();
 				Background1.Draw(window);
 				player.Draw(window);
+				for (auto* i : Gengar)
+					i->Draw(window);
 				window.setView(view);
 
 				//Die
@@ -1342,6 +1361,9 @@ int long main()
 		}
 		else if (state == 4)
 		{
+			
+
+
 			// Set Position
 			player.SetPosition((512 - 8) * 4, (352 - 8) * 4);
 

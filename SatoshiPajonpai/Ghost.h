@@ -2,14 +2,16 @@
 #include<SFML/Graphics.hpp>
 #include<time.h>
 #include "Collider.h"
+#include "Platform.h"
 
 class Ghost
 {
 public:
-	Ghost(sf::Texture* texture, int randomData, float sizeX, float sizeY);
+	Ghost(sf::Texture* texture, int randomData, Platform* platform,float sizeX, float sizeY);
 	~Ghost();
 
 	void Update();
+	
 	void Draw(sf::RenderWindow& window);
 	void SetPosition(float x, float y);
 
