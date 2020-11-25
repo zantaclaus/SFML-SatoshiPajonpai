@@ -120,6 +120,10 @@ int long main()
 
 	sf::Texture TextDieGhost;
 	TextDieGhost.loadFromFile("assets/textImages/TeztDieGhost.png");
+
+	
+	sf::Texture TextSadudKha;
+	TextSadudKha.loadFromFile("assets/textImages/TextSadudKha.png");
 	//==========================================================================================================================================//
 	// Clock 
 
@@ -1454,10 +1458,11 @@ int long main()
 					}
 				}
 
-
+				/*................................................................................*/
 
 				// Player Update
 				player.Update(deltaTime);
+
 				//Gengar Update
 				int index = 0;
 				for (auto* i : Gengar)
@@ -1501,6 +1506,7 @@ int long main()
 					}
 					index++;
 				}
+
 				// Gengar Limited
 				if (Gengar.size() < 4)
 				{
@@ -1561,11 +1567,14 @@ int long main()
 				{
 					player.SetPosition(player.GetPosition().x, 529 * 64 / 16 - 46);
 				}
+
 				// BitMap Collision
 				Collider playerCollision = player.GetCollider();
 				for (int i = 0; i < block0.size(); i++)
 					block0[i].getCollider().CheckCollision(playerCollision, 1.0f);
+
 				//Platform Collision  
+
 				/*................................................................................*/
 
 				// Draw Background
@@ -1580,7 +1589,14 @@ int long main()
 				for (auto* i : Gengar)
 					i->Draw(window);
 
+				/*................................................................................*/
 
+				// Door1 && Door2 Collision
+				if (player.GetGlobalBounds().intersects(door1.GetGlobalBounds()) || player.GetGlobalBounds().intersects(door2.GetGlobalBounds()))
+				{
+					Platform DoorLocked(&TextDoorLocked, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					DoorLocked.Draw(window);
+				}
 
 				// Trap1 Dieeeeeeeeeeeeeeee
 				if (player.GetPosition().x < 448 * 4 && player.GetPosition().x > 400 * 4 && player.GetPosition().y > 496 * 4)
@@ -1603,7 +1619,7 @@ int long main()
 					{
 						std::cout << "\nDIE\n";
 						Platform trap1_Die2(&dieLeftTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 15));
-						Platform TextDieMushroomTrap1(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						Platform SadudKha_Die(&TextSadudKha, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
 						while (window.isOpen())
 						{
 							//Close Window//
@@ -1638,26 +1654,22 @@ int long main()
 							trap1Stone2.Draw(window);
 							trap1Stone3.Draw(window);
 							trap1Mushroom.Draw(window);
-							TextDieMushroomTrap1.Draw(window);
+							SadudKha_Die.Draw(window);
 							window.setView(view);
 							window.display();
 						}
 
 					}
 				}
-				// Door1 && Door2 Collision
-				if (player.GetGlobalBounds().intersects(door1.GetGlobalBounds()) || player.GetGlobalBounds().intersects(door2.GetGlobalBounds()))
-				{
-					Platform DoorLocked(&TextDoorLocked, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
-					DoorLocked.Draw(window);
-				}
+				
+				/*................................................................................*/
+
 				//Goto Restart
 				if (restartGame)
 				{
 					std::cout << "\nRestart in State 1\n";
 					break;
 				}
-
 
 				//Window Display
 				window.setView(view);
@@ -1725,7 +1737,7 @@ int long main()
 
 			// Set View
 			view.setCenter(windowWidth / 1.5f, windowHight / 2.f);
-			std::cout << "Restart";
+			std::cout << "Restart\n";
 
 			// Render
 			while (window.isOpen())
