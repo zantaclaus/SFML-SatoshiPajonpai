@@ -217,7 +217,8 @@ int long main()
 	//==========================================================================================================================================// 
 	// State obj 
 
-	int state = 4;
+	int checkPoint = 0;
+	int state = 1;
 	int pixel = 16;
 	int randData1;
 	int countDie = 0;
@@ -233,7 +234,7 @@ int long main()
 
 	while (true)
 	{
-		int state = 4;
+		
 		//========================== status state ===========================//
 		bool checkPokeballTrap1 = false;   //-----> state 2
 		bool checkTrap2 = false;
@@ -1205,7 +1206,10 @@ int long main()
 		else if (state == 3)
 		{
 			// Set Position
-			player.SetPosition((128 - 8) * 4, 522);
+			if (checkPoint == 3)
+				player.SetPosition((128 - 8) * 4, (96 - 8) * 4);
+			else
+				player.SetPosition((128 - 8) * 4, 522);
 			Docter1.SetPosition((128-8) * 4, (80 -8) * 4 - 25);
 
 			// Background
@@ -1323,6 +1327,7 @@ int long main()
 					TalkToDocter.Draw(window);
 					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
 					{
+						checkPoint = 3;
 						Platform BoxTalkWithDocter1(&TalkWithDocter, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
 						while (1)
 						{
@@ -1561,6 +1566,80 @@ int long main()
 							Background4.Draw(window);
 							player_Die.Draw(window);
 							DieBy_Ghost.Draw(window);
+							
+							//Trap 4 - 1
+							if (state4_checkTrap2)
+							{
+								trap2_Mushroom1.Draw(window);
+								trap2_Mushroom2.Draw(window);
+								trap2_Mushroom3.Draw(window);
+								trap2_Mushroom4.Draw(window);
+								trap2_Mushroom5.Draw(window);
+								trap2_Mushroom6.Draw(window);
+							}
+							// Trap 4 - 2
+							if (state4_CheckTrap1)
+							{
+								trap1Stone1.Draw(window);
+								trap1Stone2.Draw(window);
+								trap1Stone3.Draw(window);
+								trap1Mushroom.Draw(window);
+							}
+
+							//Gengar Update
+							int index = 0;
+							for (auto* i : Gengar)
+							{
+								i->Update();
+								if (i->getDirection() == 0) // Top
+								{
+									if (i->GetPosition().y > i->getMapsizeY())
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 1) // Right
+								{
+									if (i->GetPosition().x < 0)
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 2) // Left
+								{
+									if (i->GetPosition().x > i->getMapsizeX())
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 3) // Bottom
+								{
+									if (i->GetPosition().y < 0)
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								index++;
+							}
+
+							// Gengar Limited
+							if (Gengar.size() < 4)
+							{
+								Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background4, 82.f, 80.f));
+							}
+
+							// Draw Gengar
+							for (auto* i : Gengar)
+								i->Draw(window);
+
 							window.setView(view);
 							window.display();
 						}
@@ -1651,6 +1730,61 @@ int long main()
 							trap1Stone3.Draw(window);
 							trap1Mushroom.Draw(window);
 							SadudKha_Die.Draw(window);
+
+							//Gengar Update
+							int index = 0;
+							for (auto* i : Gengar)
+							{
+								i->Update();
+								if (i->getDirection() == 0) // Top
+								{
+									if (i->GetPosition().y > i->getMapsizeY())
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 1) // Right
+								{
+									if (i->GetPosition().x < 0)
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 2) // Left
+								{
+									if (i->GetPosition().x > i->getMapsizeX())
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 3) // Bottom
+								{
+									if (i->GetPosition().y < 0)
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								index++;
+							}
+
+							// Gengar Limited
+							if (Gengar.size() < 4)
+							{
+								Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background4, 82.f, 80.f));
+							}
+
+							// Draw Gengar
+							for (auto* i : Gengar)
+								i->Draw(window);
+
 							window.setView(view);
 							window.display();
 						}
@@ -1716,6 +1850,60 @@ int long main()
 							trap2_Mushroom4.Draw(window);
 							trap2_Mushroom5.Draw(window);
 							trap2_Mushroom6.Draw(window);
+
+							//Gengar Update
+							int index = 0;
+							for (auto* i : Gengar)
+							{
+								i->Update();
+								if (i->getDirection() == 0) // Top
+								{
+									if (i->GetPosition().y > i->getMapsizeY())
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 1) // Right
+								{
+									if (i->GetPosition().x < 0)
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 2) // Left
+								{
+									if (i->GetPosition().x > i->getMapsizeX())
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 3) // Bottom
+								{
+									if (i->GetPosition().y < 0)
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								index++;
+							}
+
+							// Gengar Limited
+							if (Gengar.size() < 4)
+							{
+								Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background4, 82.f, 80.f));
+							}
+
+							// Draw Gengar
+							for (auto* i : Gengar)
+								i->Draw(window);
 
 							window.setView(view);
 							window.display();
@@ -1967,8 +2155,106 @@ int long main()
 						}
 					}
 				}
-				
-				/*.......................................Player....................................*/
+
+				// Trap3 Medaim Way
+				if (player.GetPosition().x > 176 * 4 && player.GetPosition().x < 208 * 4 && player.GetPosition().y > 480 * 4 && player.GetPosition().y < 496 * 4)
+				{
+					std::cout << "\nDIE\n";
+					Platform player_Die(&dieTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 15));
+					Platform SadudKha_Die(&TextSadudKha, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					while (window.isOpen())
+					{
+						//Close Window//
+						sf::Event evnt;
+						while (window.pollEvent(evnt))
+						{
+							switch (evnt.type)
+							{
+							case sf::Event::Closed:
+								window.close();
+								break;
+							case sf::Event::Resized:
+								std::cout << "\Resized\n";
+								ResizeView(window, view);
+								break;
+							case sf::Event::KeyReleased:
+								if (evnt.key.code == sf::Keyboard::Return)
+									restartGame = true;
+								break;
+							}
+						}
+
+						if (restartGame)
+						{
+							std::cout << "xxxx\n\n";
+							break;
+						}
+						window.clear();
+						Background4.Draw(window);
+						player_Die.Draw(window);
+						
+						SadudKha_Die.Draw(window);
+
+						//Gengar Update
+						int index = 0;
+						for (auto* i : Gengar)
+						{
+							i->Update();
+							if (i->getDirection() == 0) // Top
+							{
+								if (i->GetPosition().y > i->getMapsizeY())
+								{
+									delete Gengar.at(index);
+									Gengar.erase(Gengar.begin() + index);
+									index--;
+								}
+							}
+							if (i->getDirection() == 1) // Right
+							{
+								if (i->GetPosition().x < 0)
+								{
+									delete Gengar.at(index);
+									Gengar.erase(Gengar.begin() + index);
+									index--;
+								}
+							}
+							if (i->getDirection() == 2) // Left
+							{
+								if (i->GetPosition().x > i->getMapsizeX())
+								{
+									delete Gengar.at(index);
+									Gengar.erase(Gengar.begin() + index);
+									index--;
+								}
+							}
+							if (i->getDirection() == 3) // Bottom
+							{
+								if (i->GetPosition().y < 0)
+								{
+									delete Gengar.at(index);
+									Gengar.erase(Gengar.begin() + index);
+									index--;
+								}
+							}
+							index++;
+						}
+
+						// Gengar Limited
+						if (Gengar.size() < 4)
+						{
+							Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background4, 82.f, 80.f));
+						}
+
+						// Draw Gengar
+						for (auto* i : Gengar)
+							i->Draw(window);
+
+						window.setView(view);
+						window.display();
+					}
+				}
+
+				/*.................................Player...Gengar.................................*/
 
 				// Draw Player
 				player.Draw(window);
@@ -2118,6 +2404,7 @@ int long main()
 				//Reset Status
 				if (checkGameRestart == true)
 				{
+					state = checkPoint;
 					checkGameRestart = false;
 					restartGame = false;
 					checkstate1_out = false;
