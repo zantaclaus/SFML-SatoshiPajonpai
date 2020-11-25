@@ -62,8 +62,7 @@ int Ghost::getMapsizeY()
 void Ghost::Update()
 {
 	if (direction == 0) // Top
-	{
-		
+	{	
 		body.move(0.f, 5.f);
 		body.setTextureRect(sf::IntRect(spriteSizeX * animationFrame, spriteSizeY * 0, spriteSizeX, spriteSizeY));
 	}

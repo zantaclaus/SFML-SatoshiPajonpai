@@ -217,7 +217,7 @@ int long main()
 	//==========================================================================================================================================// 
 	// State obj 
 
-	int state = 1;
+	int state = 4;
 	int pixel = 16;
 	int randData1;
 	int countDie = 0;
@@ -233,8 +233,9 @@ int long main()
 
 	while (true)
 	{
-		// status state //
-		bool checkPokeballTrap1 = false; //-----> state 2
+		int state = 4;
+		//========================== status state ===========================//
+		bool checkPokeballTrap1 = false;   //-----> state 2
 		bool checkTrap2 = false;
 		bool checkExitTrap2 = false;
 		bool checkTrap3 = false;
@@ -248,10 +249,11 @@ int long main()
 		bool trap6_3 = false;
 		bool trap6_4 = false;
 
-		bool state4_CheckTrap1 = false;
-
+		bool state4_CheckTrap1 = false;    //-----> state 4
+		bool state4_checkTrap2 = false;
 		
-		// Maps State //
+		//============================ Maps State ============================//
+
 		if (state == 1)
 		{
 			// Background
@@ -1437,6 +1439,13 @@ int long main()
 			Platform trap1Mushroom2(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((304 - 8) * 4, (512 - 8) * 4));
 			Platform trap1Mushroom3(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((304 - 8) * 4, (528 - 8) * 4));
 
+			Platform trap2_Mushroom1(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((352 - 8) * 4, (400 - 8) * 4));
+			Platform trap2_Mushroom2(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((368 - 8) * 4, (352 - 8) * 4));
+			Platform trap2_Mushroom3(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((304 - 8) * 4, (368 - 8) * 4));
+			Platform trap2_Mushroom4(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((256 - 8) * 4, (368 - 8) * 4));
+			Platform trap2_Mushroom5(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((224 - 8) * 4, (400 - 8) * 4));
+			Platform trap2_Mushroom6(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((208 - 8) * 4, (352 - 8) * 4));
+		
 			while (window.isOpen())
 			{
 				// DeltaTime
@@ -1458,7 +1467,7 @@ int long main()
 					}
 				}
 
-				/*................................................................................*/
+				/*...........................Update..........Collision.............................*/
 
 				// Player Update
 				player.Update(deltaTime);
@@ -1575,7 +1584,7 @@ int long main()
 
 				//Platform Collision  
 
-				/*................................................................................*/
+				/*...................................Background..................................*/
 
 				// Draw Background
 				view.setCenter(player.GetPosition());
@@ -1583,22 +1592,9 @@ int long main()
 				window.clear();
 				Background4.Draw(window);
 
-				// Draw Player
-				player.Draw(window);
-				// Draw Gengar
-				for (auto* i : Gengar)
-					i->Draw(window);
+				/*.............................Trap.........AfterDraw_Player........................*/
 
-				/*................................................................................*/
-
-				// Door1 && Door2 Collision
-				if (player.GetGlobalBounds().intersects(door1.GetGlobalBounds()) || player.GetGlobalBounds().intersects(door2.GetGlobalBounds()))
-				{
-					Platform DoorLocked(&TextDoorLocked, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
-					DoorLocked.Draw(window);
-				}
-
-				// Trap1 Dieeeeeeeeeeeeeeee
+				// Trap1 Bottom Way
 				if (player.GetPosition().x < 448 * 4 && player.GetPosition().x > 400 * 4 && player.GetPosition().y > 496 * 4)
 				{
 					state4_CheckTrap1 = true;
@@ -1661,8 +1657,336 @@ int long main()
 
 					}
 				}
+
+				// Trap2 Top Way
+				if (player.GetPosition().x < 432 * 4 && player.GetPosition().x > 384 * 4 && player.GetPosition().y > 368 * 4 && player.GetPosition().y < 400 * 4)
+				{
+					state4_checkTrap2 = true;
+				}
+				if (state4_checkTrap2)
+				{
+					trap2_Mushroom1.Draw(window);
+					trap2_Mushroom2.Draw(window);
+					trap2_Mushroom3.Draw(window);
+					trap2_Mushroom4.Draw(window);
+					trap2_Mushroom5.Draw(window);
+					trap2_Mushroom6.Draw(window);
+
+					if (player.GetPosition().x > 336 * 4 && player.GetPosition().x < 352 * 4 && player.GetPosition().y > 384 * 4 && player.GetPosition().y < 400 * 4)
+					{
+						//Die 1
+						std::cout << "DiE1";
+						Platform player_Die(&dieLeftTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 15));
+						Platform Text_Die(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										restartGame = true;
+									break;
+								}
+							}
+
+							if (restartGame)
+							{
+								std::cout << "xxxx\n\n";
+								break;
+							}
+							window.clear();
+							Background4.Draw(window);
+
+							player_Die.Draw(window);
+							Text_Die.Draw(window);
+							
+							trap2_Mushroom2.Draw(window);
+							trap2_Mushroom3.Draw(window);
+							trap2_Mushroom4.Draw(window);
+							trap2_Mushroom5.Draw(window);
+							trap2_Mushroom6.Draw(window);
+
+							window.setView(view);
+							window.display();
+						}
+					}
+					if (player.GetPosition().x > 352 * 4 && player.GetPosition().x < 368 * 4 && player.GetPosition().y > 336 * 4 && player.GetPosition().y < 352 * 4)
+					{
+						//Die 2
+						std::cout << "DiE2";
+						Platform player_Die(&dieUpTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y - 15));
+						Platform Text_Die(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										restartGame = true;
+									break;
+								}
+							}
+
+							if (restartGame)
+							{
+								std::cout << "xxxx\n\n";
+								break;
+							}
+							window.clear();
+							Background4.Draw(window);
+
+							player_Die.Draw(window);
+							Text_Die.Draw(window);
+
+							trap2_Mushroom1.Draw(window);
+							trap2_Mushroom3.Draw(window);
+							trap2_Mushroom4.Draw(window);
+							trap2_Mushroom5.Draw(window);
+							trap2_Mushroom6.Draw(window);
+
+							window.setView(view);
+							window.display();
+						}
+					}
+					if (player.GetPosition().x > 288 * 4 && player.GetPosition().x < 304 * 4 && player.GetPosition().y > 352 * 4 && player.GetPosition().y < 368 * 4)
+					{
+						//Die 3
+						std::cout << "DiE3";
+						Platform player_Die(&dieTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 15));
+						Platform Text_Die(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										restartGame = true;
+									break;
+								}
+							}
+
+							if (restartGame)
+							{
+								std::cout << "xxxx\n\n";
+								break;
+							}
+							window.clear();
+							Background4.Draw(window);
+
+							player_Die.Draw(window);
+							Text_Die.Draw(window);
+
+							trap2_Mushroom1.Draw(window);
+							trap2_Mushroom2.Draw(window);
+							trap2_Mushroom4.Draw(window);
+							trap2_Mushroom5.Draw(window);
+							trap2_Mushroom6.Draw(window);
+
+							window.setView(view);
+							window.display();
+						}
+					}
+					if (player.GetPosition().x > 240 * 4 && player.GetPosition().x < 256 * 4 && player.GetPosition().y > 352 * 4 && player.GetPosition().y < 368 * 4)
+					{
+						//Die 4
+						std::cout << "DiE4";
+						Platform player_Die(&dieUpTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y - 15));
+						Platform Text_Die(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										restartGame = true;
+									break;
+								}
+							}
+
+							if (restartGame)
+							{
+								std::cout << "xxxx\n\n";
+								break;
+							}
+							window.clear();
+							Background4.Draw(window);
+
+							player_Die.Draw(window);
+							Text_Die.Draw(window);
+
+							trap2_Mushroom1.Draw(window);
+							trap2_Mushroom2.Draw(window);
+							trap2_Mushroom3.Draw(window);
+							trap2_Mushroom5.Draw(window);
+							trap2_Mushroom6.Draw(window);
+
+							window.setView(view);
+							window.display();
+						}
+					}
+					if (player.GetPosition().x > 208 * 4 && player.GetPosition().x < 224 * 4 && player.GetPosition().y > 384 * 4 && player.GetPosition().y < 400 * 4)
+					{
+						//Die 5
+						std::cout << "DiE5";
+						Platform player_Die(&dieTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 15));
+						Platform Text_Die(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										restartGame = true;
+									break;
+								}
+							}
+
+							if (restartGame)
+							{
+								std::cout << "xxxx\n\n";
+								break;
+							}
+							window.clear();
+							Background4.Draw(window);
+
+							player_Die.Draw(window);
+							Text_Die.Draw(window);
+
+							trap2_Mushroom1.Draw(window);
+							trap2_Mushroom2.Draw(window);
+							trap2_Mushroom3.Draw(window);
+							trap2_Mushroom4.Draw(window);
+							trap2_Mushroom6.Draw(window);
+
+							window.setView(view);
+							window.display();
+						}
+					}
+					if (player.GetPosition().x > 192 * 4 && player.GetPosition().x < 208 * 4 && player.GetPosition().y > 336 * 4 && player.GetPosition().y < 352 * 4)
+					{
+						//Die 6
+						std::cout << "DiE6";
+						Platform player_Die(&dieLeftTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y));
+						Platform Text_Die(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										restartGame = true;
+									break;
+								}
+							}
+
+							if (restartGame)
+							{
+								std::cout << "xxxx\n\n";
+								break;
+							}
+							window.clear();
+							Background4.Draw(window);
+
+							player_Die.Draw(window);
+							Text_Die.Draw(window);
+
+							trap2_Mushroom1.Draw(window);
+							trap2_Mushroom2.Draw(window);
+							trap2_Mushroom3.Draw(window);
+							trap2_Mushroom4.Draw(window);
+							trap2_Mushroom5.Draw(window);
+
+							window.setView(view);
+							window.display();
+						}
+					}
+				}
 				
-				/*................................................................................*/
+				/*.......................................Player....................................*/
+
+				// Draw Player
+				player.Draw(window);
+				// Draw Gengar
+				for (auto* i : Gengar)
+					i->Draw(window);
+
+				/*............................Trap.........AfterDraw_Player........................*/
+
+				// Door1 && Door2 Collision
+				if (player.GetGlobalBounds().intersects(door1.GetGlobalBounds()) || player.GetGlobalBounds().intersects(door2.GetGlobalBounds()))
+				{
+					Platform DoorLocked(&TextDoorLocked, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					DoorLocked.Draw(window);
+				}
+
+				
+				/*......................................Restart.......................................*/
 
 				//Goto Restart
 				if (restartGame)
@@ -1724,7 +2048,7 @@ int long main()
 			}
 		}
 
-		// Restart //
+		//============================= Restart =============================//
 		if (restartGame)
 		{
 			// Count Die
