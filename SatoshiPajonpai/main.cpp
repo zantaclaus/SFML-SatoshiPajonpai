@@ -80,6 +80,9 @@ int long main()
 
 	sf::Texture stoneTexture;
 	stoneTexture.loadFromFile("assets/textures/stone.png");
+	
+	sf::Texture stoneDarkModeTexture;
+	stoneDarkModeTexture.loadFromFile("assets/textures/stoneDarkMode.png");
 
 	sf::Texture mushroomTexture;
 	mushroomTexture.loadFromFile("assets/textures/Mushroom.png");
@@ -115,6 +118,8 @@ int long main()
 	sf::Texture TextDoorLocked;
 	TextDoorLocked.loadFromFile("assets/textImages/TextDoorLocked.png");
 
+	sf::Texture TextDieGhost;
+	TextDieGhost.loadFromFile("assets/textImages/TeztDieGhost.png");
 	//==========================================================================================================================================//
 	// Clock 
 
@@ -256,12 +261,6 @@ int long main()
 			else
 				player.SetPosition(426, 427);
 
-			// Ganger init
-			Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background1, 82.f, 80.f));
-			Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background1, 82.f, 80.f));
-			Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background1, 82.f, 80.f));
-			Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background1, 82.f, 80.f));
-
 			// BitMap Init
 			std::vector<Bitmap> block0;
 			int outdoor[16][14] = {
@@ -325,53 +324,7 @@ int long main()
 
 				//Player Update
 				player.Update(deltaTime);
-
-				//Ganger Update
-				int index = 0;
-				for (auto* i : Gengar)
-				{
-					i->Update();
-					if (i->getDirection() == 0) // Top
-					{
-						if (i->GetPosition().y > i->getMapsizeY())
-						{
-							delete Gengar.at(index);
-							Gengar.erase(Gengar.begin() + index);
-							index--;
-						}
-					}
-					if (i->getDirection() == 1) // Right
-					{
-						if (i->GetPosition().x < 0)
-						{
-							delete Gengar.at(index);
-							Gengar.erase(Gengar.begin() + index);
-							index--;
-						}
-					}
-					if (i->getDirection() == 2) // Left
-					{
-						if (i->GetPosition().x > i->getMapsizeX())
-						{
-							delete Gengar.at(index);
-							Gengar.erase(Gengar.begin() + index);
-							index--;
-						}
-					}
-					if (i->getDirection() == 3) // Bottom
-					{
-						if (i->GetPosition().y < 0)
-						{
-							delete Gengar.at(index);
-							Gengar.erase(Gengar.begin() + index);
-							index--;
-						}
-					}
-					index++;
-				}
 					
-
-
 				//BitMap Collision
 				Collider playerCollision = player.GetCollider();
 				for (int i = 0; i < block0.size(); i++)
@@ -401,9 +354,6 @@ int long main()
 				window.clear();
 				Background1.Draw(window);
 				player.Draw(window);
-				for (auto* i : Gengar)
-					i->Draw(window);
-				window.setView(view);
 
 				//Die
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
@@ -466,6 +416,7 @@ int long main()
 				}
 
 				//Window Display
+				window.setView(view);
 				window.display();
 			}
 		}
@@ -1406,16 +1357,19 @@ int long main()
 		}
 		else if (state == 4)
 		{
-			
-
-
 			// Set Position
 			player.SetPosition((512 - 8) * 4, (352 - 8) * 4);
 
 			// Background
-			sf::Texture backgroundState5Texture;
-			backgroundState5Texture.loadFromFile("assets/maps/Map4.png");
-			Platform Background2(&backgroundState5Texture, sf::Vector2f(576 * 64 / 16, 529 * 64 / 16), sf::Vector2f(576 * 64 / 32, 529 * 64 / 32));
+			sf::Texture backgroundState4;
+			backgroundState4.loadFromFile("assets/maps/Map4.png");
+			Platform Background4(&backgroundState4, sf::Vector2f(576 * 64 / 16, 529 * 64 / 16), sf::Vector2f(576 * 64 / 32, 529 * 64 / 32));
+
+			// Ganger init
+			Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background4, 82.f, 80.f));
+			Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background4, 82.f, 80.f));
+			Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background4, 82.f, 80.f));
+			Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background4, 82.f, 80.f));
 
 			// BitMap Init
 			std::vector<Bitmap> block0;
@@ -1472,9 +1426,9 @@ int long main()
 			Platform door1(nullptr, sf::Vector2f(64, 64), sf::Vector2f(576, 751 - 70));
 			Platform door2(nullptr, sf::Vector2f(15 * 4, 15 * 4), sf::Vector2f(500.5 * 4, 320 * 4));
 
-			Platform trap1Stone1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (512 - 8) * 4));
-			Platform trap1Stone2(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (528 - 8) * 4));
-			Platform trap1Stone3(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((256 - 8) * 4, (464 - 8) * 4));
+			Platform trap1Stone1(&stoneDarkModeTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (512 - 8) * 4));
+			Platform trap1Stone2(&stoneDarkModeTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (528 - 8) * 4));
+			Platform trap1Stone3(&stoneDarkModeTexture, sf::Vector2f(64, 64), sf::Vector2f((256 - 8) * 4, (464 - 8) * 4));
 			Platform trap1Mushroom(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((240 - 8) * 4, (464 - 8) * 4));
 			Platform trap1Mushroom2(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((304 - 8) * 4, (512 - 8) * 4));
 			Platform trap1Mushroom3(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((304 - 8) * 4, (528 - 8) * 4));
@@ -1500,8 +1454,103 @@ int long main()
 					}
 				}
 
+
+
 				// Player Update
 				player.Update(deltaTime);
+				//Gengar Update
+				int index = 0;
+				for (auto* i : Gengar)
+				{
+					i->Update();
+					if (i->getDirection() == 0) // Top
+					{
+						if (i->GetPosition().y > i->getMapsizeY())
+						{
+							delete Gengar.at(index);
+							Gengar.erase(Gengar.begin() + index);
+							index--;
+						}
+					}
+					if (i->getDirection() == 1) // Right
+					{
+						if (i->GetPosition().x < 0)
+						{
+							delete Gengar.at(index);
+							Gengar.erase(Gengar.begin() + index);
+							index--;
+						}
+					}
+					if (i->getDirection() == 2) // Left
+					{
+						if (i->GetPosition().x > i->getMapsizeX())
+						{
+							delete Gengar.at(index);
+							Gengar.erase(Gengar.begin() + index);
+							index--;
+						}
+					}
+					if (i->getDirection() == 3) // Bottom
+					{
+						if (i->GetPosition().y < 0)
+						{
+							delete Gengar.at(index);
+							Gengar.erase(Gengar.begin() + index);
+							index--;
+						}
+					}
+					index++;
+				}
+				// Gengar Limited
+				if (Gengar.size() < 4)
+				{
+					Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background4, 82.f, 80.f));
+				}
+
+				// Die By Gengar
+				for (auto* i : Gengar)
+				{
+					if (i->GetGlobalBounds().intersects(player.GetGlobalBounds()))
+					{
+						std::cout << "\nDIE\n";
+						Platform player_Die(&dieTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 15));
+						Platform DieBy_Ghost(&TextDieGhost, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										restartGame = true;
+									break;
+								}
+							}
+
+							if (restartGame)
+							{
+								std::cout << "xxxx\n\n";
+								break;
+							}
+							window.clear();
+							Background4.Draw(window);
+							player_Die.Draw(window);
+							DieBy_Ghost.Draw(window);
+							window.setView(view);
+							window.display();
+						}
+					}
+				}
 
 				// Window Collision
 				if (player.GetPosition().x < 0 + 29)
@@ -1512,24 +1561,27 @@ int long main()
 				{
 					player.SetPosition(player.GetPosition().x, 529 * 64 / 16 - 46);
 				}
-
-				// BitMap Collisio n
+				// BitMap Collision
 				Collider playerCollision = player.GetCollider();
 				for (int i = 0; i < block0.size(); i++)
 					block0[i].getCollider().CheckCollision(playerCollision, 1.0f);
-
 				//Platform Collision  
+				/*................................................................................*/
 
-
-				// DrawBackground
+				// Draw Background
 				view.setCenter(player.GetPosition());
 				std::cout << "x = " << player.GetPosition().x << " y = " << player.GetPosition().y << std::endl;
 				window.clear();
-				Background2.Draw(window);
-				
-				// DrawPlayer
+				Background4.Draw(window);
+
+				// Draw Player
 				player.Draw(window);
-				
+				// Draw Gengar
+				for (auto* i : Gengar)
+					i->Draw(window);
+
+
+
 				// Trap1 Dieeeeeeeeeeeeeeee
 				if (player.GetPosition().x < 448 * 4 && player.GetPosition().x > 400 * 4 && player.GetPosition().y > 496 * 4)
 				{
@@ -1580,7 +1632,7 @@ int long main()
 								break;
 							}
 							window.clear();
-							Background2.Draw(window);
+							Background4.Draw(window);
 							trap1_Die2.Draw(window);
 							trap1Stone1.Draw(window);
 							trap1Stone2.Draw(window);
@@ -1593,20 +1645,19 @@ int long main()
 
 					}
 				}
-
 				// Door1 && Door2 Collision
 				if (player.GetGlobalBounds().intersects(door1.GetGlobalBounds()) || player.GetGlobalBounds().intersects(door2.GetGlobalBounds()))
 				{
 					Platform DoorLocked(&TextDoorLocked, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
 					DoorLocked.Draw(window);
 				}
-
 				//Goto Restart
 				if (restartGame)
 				{
 					std::cout << "\nRestart in State 1\n";
 					break;
 				}
+
 
 				//Window Display
 				window.setView(view);
