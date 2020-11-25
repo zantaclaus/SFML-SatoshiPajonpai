@@ -325,8 +325,52 @@ int long main()
 
 				//Player Update
 				player.Update(deltaTime);
+
+				//Ganger Update
+				int index = 0;
 				for (auto* i : Gengar)
+				{
 					i->Update();
+					if (i->getDirection() == 0) // Top
+					{
+						if (i->GetPosition().y > i->getMapsizeY())
+						{
+							delete Gengar.at(index);
+							Gengar.erase(Gengar.begin() + index);
+							index--;
+						}
+					}
+					if (i->getDirection() == 1) // Right
+					{
+						if (i->GetPosition().x < 0)
+						{
+							delete Gengar.at(index);
+							Gengar.erase(Gengar.begin() + index);
+							index--;
+						}
+					}
+					if (i->getDirection() == 2) // Left
+					{
+						if (i->GetPosition().x > i->getMapsizeX())
+						{
+							delete Gengar.at(index);
+							Gengar.erase(Gengar.begin() + index);
+							index--;
+						}
+					}
+					if (i->getDirection() == 3) // Bottom
+					{
+						if (i->GetPosition().y < 0)
+						{
+							delete Gengar.at(index);
+							Gengar.erase(Gengar.begin() + index);
+							index--;
+						}
+					}
+					index++;
+				}
+					
+
 
 				//BitMap Collision
 				Collider playerCollision = player.GetCollider();
@@ -417,6 +461,7 @@ int long main()
 				if (restartGame)
 				{
 					std::cout << "\nRestart in State 1\n";
+					
 					break;
 				}
 
@@ -1689,6 +1734,11 @@ int long main()
 					checkGameRestart = false;
 					restartGame = false;
 					checkstate1_out = false;
+					while (Gengar.size() != 0)
+					{
+						delete Gengar.at(0);
+						Gengar.erase(Gengar.begin());
+					}
 					break;
 				}
 

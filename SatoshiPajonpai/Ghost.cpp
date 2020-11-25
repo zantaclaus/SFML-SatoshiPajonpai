@@ -13,31 +13,51 @@ Ghost::Ghost(sf::Texture * texture, int randomData, Platform * platform, float s
 	direction = randomData;
 	direction = direction % 4;
 
+	mapSize_X = platform->getSize().x;
+	mapSize_Y = platform->getSize().y;
+
 	if (direction == 0) // Top
 	{
-		float x = rand() % (int(platform->getSize().x) - 10) + 10;
+		float x = rand() % (int(mapSize_X) - 10) + 10;
 		body.setPosition(x, 0);
 	}
 	if (direction == 1) // Right
 	{
-		int y = rand() % (int(platform->getSize().x) - 10) + 10;
-		body.setPosition(platform->getSize().y, y);
+		int y = rand() % (int(mapSize_Y) - 10) + 10;
+		body.setPosition(mapSize_Y, y);
 	}
 	if (direction == 2) // Left
 	{
-		int y = rand() % (int(platform->getSize().x) - 10) + 10;
+		int y = rand() % (int(mapSize_Y) - 10) + 10;
 		body.setPosition(0, y);
 	}
 	if (direction == 3) // Bottom
 	{
-		int x = rand() % (int(platform->getSize().x) - 10) + 10;
-		body.setPosition(x, platform->getSize().x);
+		int x = rand() % (int(mapSize_X) - 10) + 10;
+		body.setPosition(x, mapSize_X);
 	}
 }
 
-	Ghost::~Ghost()
+Ghost::~Ghost()
 {
 }
+
+int Ghost::getDirection()
+{
+	return direction;
+}
+
+int Ghost::getMapsizeX()
+{
+	return mapSize_X;
+}
+
+int Ghost::getMapsizeY()
+{
+	return mapSize_Y;
+}
+
+
 
 void Ghost::Update()
 {
@@ -66,6 +86,8 @@ void Ghost::Update()
 
 	if (animationFrame >= 3)
 		animationFrame = 0;
+
+
 }
 
 void Ghost::Draw(sf::RenderWindow& window)

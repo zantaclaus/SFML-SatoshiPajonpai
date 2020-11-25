@@ -10,8 +10,11 @@ public:
 	Ghost(sf::Texture* texture, int randomData, Platform* platform,float sizeX, float sizeY);
 	~Ghost();
 
+	int getDirection();
+	int getMapsizeX();
+	int getMapsizeY();
+
 	void Update();
-	
 	void Draw(sf::RenderWindow& window);
 	void SetPosition(float x, float y);
 
@@ -24,6 +27,8 @@ public:
 private:
 	int spriteSizeX;
 	int spriteSizeY;
+	int mapSize_X;
+	int mapSize_Y;
 	int direction;
 	int animationFrame = 0;
 	sf::RectangleShape body;
