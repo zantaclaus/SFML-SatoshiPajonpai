@@ -1,0 +1,28 @@
+#pragma once
+#include<SFML/Graphics.hpp>
+#include<time.h>
+#include "Collider.h"
+
+class Ghost
+{
+public:
+	Ghost(sf::Texture* texture, int randomData, float sizeX, float sizeY);
+	~Ghost();
+
+	void Update();
+	void Draw(sf::RenderWindow& window);
+	void SetPosition(float x, float y);
+
+	sf::FloatRect GetGlobalBounds() { return body.getGlobalBounds(); }
+	sf::Vector2f GetPosition() { return body.getPosition(); }
+	Collider GetCollider() { return Collider(body); }
+
+	sf::Clock NPCClock;
+
+private:
+	int spriteSizeX;
+	int spriteSizeY;
+	int direction;
+	int animationFrame = 0;
+	sf::RectangleShape body;
+};
