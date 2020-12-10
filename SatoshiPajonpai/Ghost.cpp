@@ -24,7 +24,7 @@ Ghost::Ghost(sf::Texture * texture, int randomData, Platform * platform, float s
 	if (direction == 1) // Right
 	{
 		int y = rand() % (int(mapSize_Y) - 10) + 10;
-		body.setPosition(mapSize_Y, y);
+		body.setPosition(mapSize_X, y);
 	}
 	if (direction == 2) // Left
 	{
@@ -34,7 +34,7 @@ Ghost::Ghost(sf::Texture * texture, int randomData, Platform * platform, float s
 	if (direction == 3) // Bottom
 	{
 		int x = rand() % (int(mapSize_X) - 10) + 10;
-		body.setPosition(x, mapSize_X);
+		body.setPosition(x, mapSize_Y);
 	}
 }
 
