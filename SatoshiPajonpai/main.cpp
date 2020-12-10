@@ -1435,6 +1435,7 @@ int long main()
 			// Platform init
 			Platform door1(nullptr, sf::Vector2f(64, 64), sf::Vector2f(576, 751 - 70));
 			Platform door2(nullptr, sf::Vector2f(15 * 4, 15 * 4), sf::Vector2f(500.5 * 4, 320 * 4));
+			Platform door3(nullptr, sf::Vector2f(32 * 4, 2 * 4), sf::Vector2f(16 * 4, 528 * 4));
 
 			Platform trap1Stone1(&stoneDarkModeTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (512 - 8) * 4));
 			Platform trap1Stone2(&stoneDarkModeTexture, sf::Vector2f(64, 64), sf::Vector2f((480 - 8) * 4, (528 - 8) * 4));
@@ -1442,6 +1443,16 @@ int long main()
 			Platform trap1Mushroom(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((240 - 8) * 4, (464 - 8) * 4));
 			Platform trap1Mushroom2(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((304 - 8) * 4, (512 - 8) * 4));
 			Platform trap1Mushroom3(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((304 - 8) * 4, (528 - 8) * 4));
+
+			Platform trapLeft_Die(&dieTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f((16 - 8) * 4, (368 - 8) * 4));
+			Platform trapLeft_Pokeball(&pokeballTexture, sf::Vector2f(64, 64), sf::Vector2f((96 - 8) * 4, (336 - 8) * 4));
+			Platform trapLeft_Mushroom(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((16 - 8) * 4, (368 - 8) * 4));
+			Platform trapLeft_Stone(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((32 - 8) * 4, (368 - 8) * 4));
+
+			Platform trapMid_stone1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((128 - 8) * 4, (448 - 8) * 4));
+			Platform trapMid_stone2(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((128 - 8) * 4, (464 - 8) * 4));
+			Platform trapMid_Pokeball(&pokeballTexture, sf::Vector2f(64, 64), sf::Vector2f((64 - 8) * 4, (432 - 8) * 4));
+			
 
 			Platform trap2_Mushroom1(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((352 - 8) * 4, (400 - 8) * 4));
 			Platform trap2_Mushroom2(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((368 - 8) * 4, (352 - 8) * 4));
@@ -1526,7 +1537,7 @@ int long main()
 					Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background4, 82.f, 80.f));
 				}
 
-				// Die By Gengar
+				// Dead By Gengar
 				for (auto* i : Gengar)
 				{
 					if (i->GetGlobalBounds().intersects(player.GetGlobalBounds()))
@@ -1671,6 +1682,343 @@ int long main()
 				Background4.Draw(window);
 
 				/*.............................Trap.........AfterDraw_Player........................*/
+
+				// Trap Left Mushroom -----> Die
+				if (!checkPokeballTrap1 && player.GetGlobalBounds().intersects(trapLeft_Pokeball.GetGlobalBounds())) //Get Pokeball
+				{
+					Platform trap1TextKey(&foundKey, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					checkPokeballTrap1 = true;
+					while (window.isOpen())
+					{
+						//Close Window//
+						sf::Event evnt;
+						while (window.pollEvent(evnt))
+						{
+							switch (evnt.type)
+							{
+							case sf::Event::Closed:
+								window.close();
+								break;
+							case sf::Event::Resized:
+								std::cout << "\Resized\n";
+								ResizeView(window, view);
+								break;
+							case sf::Event::KeyReleased:
+								if (evnt.key.code == sf::Keyboard::Return)
+									continueGame = true;
+								break;
+							}
+						}
+
+						if (continueGame)
+						{
+							std::cout << "Enter Click\n\n";
+
+							continueGame = false;
+							break;
+						}
+						window.clear();
+						Background4.Draw(window);
+						trap2_Mushroom1.Draw(window);
+						trap2_Mushroom2.Draw(window);
+						trap2_Mushroom3.Draw(window);
+						trap2_Mushroom4.Draw(window);
+						trap2_Mushroom5.Draw(window);
+						trap2_Mushroom6.Draw(window);
+						player.Draw(window);
+						window.setView(view);
+						trap1TextKey.Draw(window);
+						window.display();
+					}
+				}
+				if (checkPokeballTrap1)
+				{
+
+					trapLeft_Mushroom.Draw(window);
+					trapLeft_Stone.Draw(window);
+					trapLeft_Stone.GetCollider().CheckCollision(playerCollision, 1.0f);
+					if (player.GetGlobalBounds().intersects(trapLeft_Mushroom.GetGlobalBounds()))
+					{
+						Platform TextDieMushroomTrap1(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						//Die
+						std::cout << "\nDIE\n";
+						while (window.isOpen())
+						{
+							
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										restartGame = true;
+									break;
+								}
+							}
+
+							if (restartGame)
+							{
+								std::cout << "xxxx\n\n";
+								break;
+							}
+							window.clear();
+							Background4.Draw(window);
+							trapLeft_Stone.Draw(window);
+					
+							trap2_Mushroom1.Draw(window);
+							trap2_Mushroom2.Draw(window);
+							trap2_Mushroom3.Draw(window);
+							trap2_Mushroom4.Draw(window);
+							trap2_Mushroom5.Draw(window);
+							trap2_Mushroom6.Draw(window);
+							
+							//Gengar Update
+							int index = 0;
+							for (auto* i : Gengar)
+							{
+								i->Update();
+								if (i->getDirection() == 0) // Top
+								{
+									if (i->GetPosition().y > i->getMapsizeY())
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 1) // Right
+								{
+									if (i->GetPosition().x < 0)
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 2) // Left
+								{
+									if (i->GetPosition().x > i->getMapsizeX())
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 3) // Bottom
+								{
+									if (i->GetPosition().y < 0)
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								index++;
+							}
+
+							// Gengar Limited
+							if (Gengar.size() < 4)
+							{
+								Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background4, 82.f, 80.f));
+							}
+							
+							// Draw Gengar
+							for (auto* i : Gengar)
+								i->Draw(window);
+
+
+							trapLeft_Die.Draw(window);
+							TextDieMushroomTrap1.Draw(window);
+							window.setView(view);
+							window.display();
+						}
+					}
+				}
+				else
+				{
+					trapLeft_Pokeball.Draw(window);
+				}
+
+				// Trap Mid Medicine
+				if (player.GetPosition().x > 48 * 4 && player.GetPosition().x < 100 * 4 && player.GetPosition().y > 416 * 4 && player.GetPosition().y < 480 * 4)
+				{
+					checkTrap3 = true;
+				}
+				if (checkTrap3)
+				{
+					trapMid_stone1.Draw(window);
+					trapMid_stone2.Draw(window);
+					trapMid_stone1.GetCollider().CheckCollision(playerCollision, 1.0f);
+					trapMid_stone2.GetCollider().CheckCollision(playerCollision, 1.0f);
+
+					if (!checkTrap3Pokeball && player.GetGlobalBounds().intersects(trapMid_Pokeball.GetGlobalBounds()))
+					{
+						Platform trap3TextMedicine(&foundMedicine, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						checkTrap3Pokeball = true;
+						//Text Get Drug
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										continueGame = true;
+									break;
+								}
+							}
+
+							if (continueGame)
+							{
+								std::cout << "Enter Click\n\n";
+
+								continueGame = false;
+								break;
+							}
+							window.clear();
+							Background4.Draw(window);
+							player.Draw(window);
+							window.setView(view);
+
+							trap2_Mushroom1.Draw(window);
+							trap2_Mushroom2.Draw(window);
+							trap2_Mushroom3.Draw(window);
+							trap2_Mushroom4.Draw(window);
+							trap2_Mushroom5.Draw(window);
+							trap2_Mushroom6.Draw(window);
+
+							trapMid_stone1.Draw(window);
+							trapMid_stone2.Draw(window);
+							trapLeft_Pokeball.Draw(window);
+							trap3TextMedicine.Draw(window);
+							window.display();
+						}
+					}
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+					{
+						Platform TextDieMedicineTrap3(&TextDieMedicine, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						Platform trap3Die(&dieTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y));
+						//Die
+						std::cout << "\nDIE\n";
+						while (window.isOpen())
+						{
+							
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										restartGame = true;
+									break;
+								}
+							}
+
+							if (restartGame)
+							{
+								std::cout << "xxxx\n\n";
+								break;
+							}
+							window.clear();
+							Background4.Draw(window);
+							trap3Die.Draw(window);
+
+							//Gengar Update
+							int index = 0;
+							for (auto* i : Gengar)
+							{
+								i->Update();
+								if (i->getDirection() == 0) // Top
+								{
+									if (i->GetPosition().y > i->getMapsizeY())
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 1) // Right
+								{
+									if (i->GetPosition().x < 0)
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 2) // Left
+								{
+									if (i->GetPosition().x > i->getMapsizeX())
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 3) // Bottom
+								{
+									if (i->GetPosition().y < 0)
+									{
+										delete Gengar.at(index);
+										Gengar.erase(Gengar.begin() + index);
+										index--;
+									}
+								}
+								index++;
+							}
+
+							// Gengar Limited
+							if (Gengar.size() < 4)
+							{
+								Gengar.push_back(new Ghost(&GengarTexture, int(rand()), &Background4, 82.f, 80.f));
+							}
+
+							// Draw Gengar
+							for (auto* i : Gengar)
+								i->Draw(window);
+							trapMid_stone1.Draw(window);
+							trapMid_stone2.Draw(window);
+							trapMid_Pokeball.Draw(window);
+							TextDieMedicineTrap3.Draw(window);
+							window.setView(view);
+							window.display();
+						}
+
+					}
+				}
+				if (!checkTrap3Pokeball)
+				{
+					trapMid_Pokeball.Draw(window);
+				}
+
 
 				// Trap1 Bottom Way
 				if (player.GetPosition().x < 448 * 4 && player.GetPosition().x > 400 * 4 && player.GetPosition().y > 496 * 4)
@@ -2638,6 +2986,14 @@ int long main()
 					Platform DoorLocked(&TextDoorLocked, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
 					DoorLocked.Draw(window);
 				}
+
+				// Dooe3 Collision
+				if (player.GetGlobalBounds().intersects(door3.GetGlobalBounds()))
+				{
+					state = 5;
+					break;
+				}
+
 
 				
 				/*......................................Restart.......................................*/
