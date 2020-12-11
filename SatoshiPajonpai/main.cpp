@@ -102,6 +102,9 @@ int long main()
 	sf::Texture snakeTexture;
 	snakeTexture.loadFromFile("assets/textures/SnakeTexture.png");
 
+	sf::Texture label2Texture;
+	label2Texture.loadFromFile("assets/textures/label2.png");
+
 	// TextImage
 	sf::Texture foundKey;
 	foundKey.loadFromFile("assets/textImages/TextKey.png");
@@ -144,6 +147,9 @@ int long main()
 	
 	sf::Texture TextLabel;
 	TextLabel.loadFromFile("assets/textImages/Label.png");
+
+	sf::Texture TextLabel2;
+	TextLabel2.loadFromFile("assets/textImages/Label2.png");
 
 	sf::Texture TextFoundCheckPoint;
 	TextFoundCheckPoint.loadFromFile("assets/textImages/TextFoundCheckPoint.png");
@@ -254,6 +260,7 @@ int long main()
 	bool continueGame = false;
 	bool checkstate1_out = false;
 	bool checkPointMap4 = false;
+	bool checkPointMap5 = false;
 
 	//==========================================================================================================================================// 
 	// Run Game
@@ -3142,7 +3149,7 @@ int long main()
 									{1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 									{1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 									{1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-									{1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 									{1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 									{1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 									{1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -3201,6 +3208,9 @@ int long main()
 			
 			// label init
 			Platform label(nullptr, sf::Vector2f(66, 66), sf::Vector2f((992 - 8) * 4, (400 - 8) * 4));
+			Platform label2(&label2Texture, sf::Vector2f(64, 64), sf::Vector2f((240) * 4, (80) * 4));
+			Platform check_label2(&label2Texture, sf::Vector2f(66, 66), sf::Vector2f((240) * 4, (80) * 4));
+			
 			
 			// Pokeball init
 			Platform Pokeball_1(&pokeballTexture, sf::Vector2f(64, 64), sf::Vector2f((848 - 8) * 4, (96 - 8) * 4));
@@ -3208,13 +3218,26 @@ int long main()
 
 			// Flower init
 			Platform flower_Checkpoint_1(&flowerItemTexture, sf::Vector2f(64, 64), sf::Vector2f((672 - 8) * 4, (816 - 8) * 4));
+			Platform flower_Checkpoint_2(&flowerItemTexture, sf::Vector2f(64, 64), sf::Vector2f((576 - 8) * 4, (64 - 8) * 4));
 
 			// Stone init
 			Platform stone_Checkpoint1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((672 - 8) * 4, (816 - 8) * 4));
 			bool check_FlowerToStone = false;
 
+			// Tarp
+			Platform Trap_stone_1(nullptr, sf::Vector2f(32 * 4, 32 * 4), sf::Vector2f((96 - 8) * 4, (608 - 8) * 4));
+			bool checkTrap_stone_1 = false;
+			Platform stone_LastTrap_1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((80 - 8) * 4, (608 - 8) * 4));
+			Platform stone_LastTrap_2(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((80 - 8) * 4, (624 - 8) * 4));
+
+
+
 			//---------------------------------------------Run Game---------------------------------------------
-			player.SetPosition(1160 * 4, 48 * 4);
+			if(!checkPointMap5)
+				player.SetPosition(1160 * 4, 48 * 4);
+			else
+				player.SetPosition(576 * 4, 64 * 4);
+
 			while (window.isOpen())
 			{
 				//------------------------------Time Event------------------------------//
@@ -3420,6 +3443,13 @@ int long main()
 							{
 								trap1_Mushroom.Draw(window);
 							}
+							// CheckPoint Draw
+							if (!checkPointMap5)
+							{
+								flower_Checkpoint_2.Draw(window);
+							}
+							// Label 2 Draw
+							label2.Draw(window);
 
 							//Window Display
 							window.setView(view);
@@ -3888,6 +3918,178 @@ int long main()
 					}
 				}
 
+				// Check Point
+				if (player.GetGlobalBounds().intersects(flower_Checkpoint_2.GetGlobalBounds())) 
+				{
+					if (checkPointMap5 == false)
+					{
+						Platform FoundCheckPoint(&TextFoundCheckPoint, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+
+						std::cout << "CHECKPOINT ON\n";
+						checkPoint = 5;
+						checkPointMap5 = true;
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										continueGame = true;
+									break;
+								}
+							}
+
+							if (continueGame)
+							{
+								std::cout << "Enter Click\n\n";
+
+								continueGame = false;
+								break;
+							}
+							window.clear();
+							Background5.Draw(window);
+							player.Draw(window);
+							window.setView(view);
+							FoundCheckPoint.Draw(window);
+							window.display();
+						}
+					}
+				}
+				if (!checkPointMap5)
+				{
+					flower_Checkpoint_2.Draw(window);
+				}
+
+				// Trap Treasure
+				if (player.GetPosition().x > 352 * 4 && player.GetPosition().x < 368 * 4 && player.GetPosition().y > 608 * 4 && player.GetPosition().y < 624 * 4)
+				{
+					Platform SadudKha_Die(&TextSadudKha, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					Platform player_Die(&dieUpTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y - 50));
+					while (window.isOpen())
+					{
+						//Close Window//
+						sf::Event evnt;
+						while (window.pollEvent(evnt))
+						{
+							switch (evnt.type)
+							{
+							case sf::Event::Closed:
+								window.close();
+								break;
+							case sf::Event::Resized:
+								std::cout << "\Resized\n";
+								ResizeView(window, view);
+								break;
+							case sf::Event::KeyReleased:
+								if (evnt.key.code == sf::Keyboard::Return)
+									restartGame = true;
+								break;
+							}
+						}
+						//Goto Restart//
+						if (restartGame)
+						{
+							std::cout << "xxxx\n\n";
+							break;
+						}
+						//Render Window//
+						window.clear();
+						Background5.Draw(window);
+
+						//Gengar Update
+						int index = 0;
+						for (auto* i : Ghosty)
+						{
+							i->Update();
+							if (i->getDirection() == 0) // Top
+							{
+								if (i->GetPosition().y > 880 * 4)
+								{
+									delete Ghosty.at(index);
+									Ghosty.erase(Ghosty.begin() + index);
+									index--;
+								}
+							}
+							if (i->getDirection() == 1) // Right
+							{
+								if (i->GetPosition().x < 0)
+								{
+									delete Ghosty.at(index);
+									Ghosty.erase(Ghosty.begin() + index);
+									index--;
+								}
+							}
+							if (i->getDirection() == 2) // Left
+							{
+								if (i->GetPosition().x > 1280 * 4)
+								{
+									delete Ghosty.at(index);
+									Ghosty.erase(Ghosty.begin() + index);
+									index--;
+								}
+							}
+							if (i->getDirection() == 3) // Bottom
+							{
+								if (i->GetPosition().y < 0)
+								{
+									delete Ghosty.at(index);
+									Ghosty.erase(Ghosty.begin() + index);
+									index--;
+								}
+							}
+							index++;
+						}
+
+						// Gengar Limited
+						if (Ghosty.size() < 10)
+						{
+							Ghosty.push_back(new Ghost(&GengarTexture, int(rand()), &Background5, 82.f, 80.f));
+						}
+
+						for (auto* i : Ghosty) //--> Draw Gengar
+							i->Draw(window);
+
+						player_Die.Draw(window);
+						SadudKha_Die.Draw(window);
+
+						window.setView(view);
+						window.display();
+					}
+				}
+
+				// stonne 1 Last trap
+				if (player.GetGlobalBounds().intersects(Trap_stone_1.GetGlobalBounds()))
+				{
+					stone_LastTrap_1.Draw(window);
+					stone_LastTrap_2.Draw(window);
+
+					stone_LastTrap_1.GetCollider().CheckCollision(playerCollision, 1.0f);
+					stone_LastTrap_2.GetCollider().CheckCollision(playerCollision, 1.0f);
+
+					checkTrap_stone_1 = true;
+				}
+
+				// label 2
+				label2.Draw(window);
+				label2.GetCollider().CheckCollision(playerCollision, 1.0f);
+				if (player.GetGlobalBounds().intersects(check_label2.GetGlobalBounds()))
+				{
+					Platform TexttLabel2(&TextLabel2, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					TexttLabel2.Draw(window);
+					
+				}
+				
 				//------------------------------ Go Other State  ------------------------------//
 				//Goto Restart
 				if (restartGame)
@@ -3987,7 +4189,6 @@ int long main()
 			}
 		}
 	}
-
 	//==========================================================================================================================================// 
 	// EndGame
 	return 0;

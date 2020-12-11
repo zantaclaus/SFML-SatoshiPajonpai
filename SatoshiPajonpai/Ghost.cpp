@@ -5,7 +5,7 @@ Ghost::Ghost(sf::Texture * texture, int randomData, Platform * platform, float s
 	body.setSize(sf::Vector2f(sizeX, sizeY));
 	body.setOrigin(body.getSize() / 2.0f);
 	body.setTexture(texture);
-
+	
 	spriteSizeX = texture->getSize().x / 4;
 	spriteSizeY = texture->getSize().y / 4;
 	body.setTextureRect(sf::IntRect(0, 0, sizeX, sizeY));
