@@ -10,8 +10,8 @@ Ghost::Ghost(sf::Texture * texture, int randomData, Platform * platform, float s
 	spriteSizeY = texture->getSize().y / 4;
 	body.setTextureRect(sf::IntRect(0, 0, sizeX, sizeY));
 
-	direction = randomData;
-	direction = direction % 4;
+	this->direction = randomData;
+	this->direction = direction % 4;
 
 	mapSize_X = platform->getSize().x;
 	mapSize_Y = platform->getSize().y;
@@ -44,7 +44,7 @@ Ghost::~Ghost()
 
 int Ghost::getDirection()
 {
-	return direction;
+	return this->direction;
 }
 
 int Ghost::getMapsizeX()

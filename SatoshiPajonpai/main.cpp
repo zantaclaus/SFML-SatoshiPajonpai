@@ -62,6 +62,10 @@ int long main()
 	sf::Texture pokeballTexture;
 	pokeballTexture.loadFromFile("assets/textures/pokeball.png");
 
+	
+	sf::Texture flowerItemTexture;
+	flowerItemTexture.loadFromFile("assets/textures/FlowerItem.png");
+
 	sf::Texture dieTexture;
 	dieTexture.loadFromFile("assets/textures/die.png");
 
@@ -140,6 +144,12 @@ int long main()
 	
 	sf::Texture TextLabel;
 	TextLabel.loadFromFile("assets/textImages/Label.png");
+
+	sf::Texture TextFoundCheckPoint;
+	TextFoundCheckPoint.loadFromFile("assets/textImages/TextFoundCheckPoint.png");
+
+	sf::Texture HintCheckPoint;
+	HintCheckPoint.loadFromFile("assets/textImages/TextHintMap5.jpg");
 
 	//==========================================================================================================================================//
 	// Clock 
@@ -234,7 +244,7 @@ int long main()
 	//==========================================================================================================================================// 
 	// State obj 
 
-	int checkPoint = 1;
+	int checkPoint = 5;
 	int state = 1;
 	int pixel = 16;
 	int randData1;
@@ -243,6 +253,7 @@ int long main()
 	bool restartGame = false;
 	bool continueGame = false;
 	bool checkstate1_out = false;
+	bool checkPointMap4 = false;
 
 	//==========================================================================================================================================// 
 	// Run Game
@@ -267,6 +278,7 @@ int long main()
 
 		bool state4_CheckTrap1 = false;    //-----> state 4
 		bool state4_checkTrap2 = false;
+		
 		
 		//============================ Maps State ============================//
 
@@ -1385,7 +1397,10 @@ int long main()
 		else if (state == 4)
 		{
 			// Set Position
-			player.SetPosition((512 - 8) * 4, (352 - 8) * 4);
+			if (checkPointMap4 == true)
+				player.SetPosition((416 - 8) * 4, (64 - 8) * 4);
+			else
+				player.SetPosition((512 - 8) * 4, (352 - 8) * 4);
 
 			// Background
 			sf::Texture backgroundState4;
@@ -1477,7 +1492,12 @@ int long main()
 			Platform trap2_Mushroom4(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((256 - 8) * 4, (368 - 8) * 4));
 			Platform trap2_Mushroom5(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((224 - 8) * 4, (400 - 8) * 4));
 			Platform trap2_Mushroom6(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((208 - 8) * 4, (352 - 8) * 4));
-		
+			
+
+			Platform Flower_checkPoint(nullptr, sf::Vector2f(64, 64), sf::Vector2f((416 - 8) * 4, (64 - 8) * 4));
+			
+			
+			//------------------- Run Game -------------------------
 			while (window.isOpen())
 			{
 				// DeltaTime
@@ -3010,8 +3030,55 @@ int long main()
 					state = 5;
 					break;
 				}
+				
+				//CheckPoint
+				if(player.GetGlobalBounds().intersects(Flower_checkPoint.GetGlobalBounds()))
+				{ 
+					if (checkPointMap4 == false)
+					{
+						Platform FoundCheckPoint(&TextFoundCheckPoint, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						
+						std::cout << "CHECKPOINT ON\n";
+						checkPoint = 4;
+						checkPointMap4 = true;
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										continueGame = true;
+									break;
+								}
+							}
 
+							if (continueGame)
+							{
+								std::cout << "Enter Click\n\n";
 
+								continueGame = false;
+								break;
+							}
+							window.clear();
+							Background4.Draw(window);
+							player.Draw(window);
+							window.setView(view);
+							FoundCheckPoint.Draw(window);
+							window.display();
+						}
+					}
+				}
 				
 				/*......................................Restart.......................................*/
 
@@ -3128,9 +3195,23 @@ int long main()
 			bool check_trap1_Mushroom = false;
 			Platform trap1_Jar(nullptr, sf::Vector2f(70, 70), sf::Vector2f((1184 - 8) * 4, (432 - 8) * 4));
 			Platform trap1_Snake(&snakeTexture, sf::Vector2f(24, 36), sf::Vector2f((1177 ) * 4, (417 ) * 4));
+
+			Platform trap2_Mushroom_1(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((656 - 8) * 4, (576 - 8) * 4));
+			Platform trap2_Mushroom_2(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((672 - 8) * 4, (576 - 8) * 4));
 			
+			// label init
 			Platform label(nullptr, sf::Vector2f(66, 66), sf::Vector2f((992 - 8) * 4, (400 - 8) * 4));
 			
+			// Pokeball init
+			Platform Pokeball_1(&pokeballTexture, sf::Vector2f(64, 64), sf::Vector2f((848 - 8) * 4, (96 - 8) * 4));
+			bool check_Pokeball_1 = false;
+
+			// Flower init
+			Platform flower_Checkpoint_1(&flowerItemTexture, sf::Vector2f(64, 64), sf::Vector2f((672 - 8) * 4, (816 - 8) * 4));
+
+			// Stone init
+			Platform stone_Checkpoint1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((672 - 8) * 4, (816 - 8) * 4));
+			bool check_FlowerToStone = false;
 
 			//---------------------------------------------Run Game---------------------------------------------
 			player.SetPosition(1160 * 4, 48 * 4);
@@ -3328,6 +3409,11 @@ int long main()
 
 							for (auto* i : Ghosty) //--> Draw Gengar
 								i->Draw(window);
+
+							if (!check_Pokeball_1)
+							{
+								Pokeball_1.Draw(window);
+							}
 
 							// Mushroom Draw
 							if (check_trap1_Mushroom)
@@ -3544,6 +3630,58 @@ int long main()
 					break;
 				}
 
+				// Hint CheckPoint
+				if (!check_Pokeball_1)
+				{
+					if (player.GetGlobalBounds().intersects(Pokeball_1.GetGlobalBounds()))
+					{
+						check_Pokeball_1 = true;
+						Platform TextHintCheckPoint(&HintCheckPoint, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										continueGame = true;
+									break;
+								}
+							}
+
+							if (continueGame)
+							{
+								std::cout << "Enter Click\n\n";
+
+								continueGame = false;
+								break;
+							}
+							window.clear();
+							Background5.Draw(window);
+							player.Draw(window);
+							window.setView(view);
+							TextHintCheckPoint.Draw(window);
+							window.display();
+						}
+					}
+				}
+
+				// flower -> stone
+				if (player.GetPosition().x > 640 * 4 && player.GetPosition().x < 672 * 4 && player.GetPosition().y > 592 * 4 && player.GetPosition().y < 624 * 4)
+				{
+					check_FlowerToStone = true;
+				}
+
 				//------------------------------  Draw ------------------------------//
 
 				//Draw Player 
@@ -3684,6 +3822,71 @@ int long main()
 					Label.Draw(window);
 				}
 
+				// Pokeball
+				if (!check_Pokeball_1)
+				{
+					Pokeball_1.Draw(window);
+				}
+
+				// flower -> stone
+				if (check_FlowerToStone)
+				{
+					stone_Checkpoint1.Draw(window);
+					stone_Checkpoint1.GetCollider().CheckCollision(playerCollision, 1.0f);
+				}
+				else
+				{
+					flower_Checkpoint_1.Draw(window);
+					
+				}
+				if (check_FlowerToStone)
+				{
+					trap2_Mushroom_1.Draw(window);
+					trap2_Mushroom_2.Draw(window);
+
+					if (player.GetGlobalBounds().intersects(trap2_Mushroom_1.GetGlobalBounds()) || player.GetGlobalBounds().intersects(trap2_Mushroom_2.GetGlobalBounds()))
+					{
+						Platform TextDieMushroomTrap1(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						Platform player_Die(&dieUpTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y - 62));
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										restartGame = true;
+									break;
+								}
+							}
+							//Goto Restart//
+							if (restartGame)
+							{
+								std::cout << "xxxx\n\n";
+								break;
+							}
+							//Render Window//
+							window.clear();
+							Background5.Draw(window);
+							
+							player_Die.Draw(window);
+							TextDieMushroomTrap1.Draw(window);
+
+							window.setView(view);
+							window.display();
+						}
+					}
+				}
 
 				//------------------------------ Go Other State  ------------------------------//
 				//Goto Restart

@@ -22,17 +22,17 @@ void Insect::Update()
 {
 	if (direction == 0)// Go Bottom
 	{
-		body.move(0.f, -5.f);
+		body.move(0.f, -10.f);
 		body.setTextureRect(sf::IntRect(spriteSizeX , spriteSizeY * 0, spriteSizeX, spriteSizeY));
 	}
 	if (direction == 1) // Go Left
 	{
-		body.move(-5.f, 0.f);
+		body.move(-10.f, 0.f);
 		body.setTextureRect(sf::IntRect(spriteSizeX , spriteSizeY * 1, spriteSizeX, spriteSizeY));
 	}
 	if (direction == 2) // Go Right
 	{
-		body.move(5.f, 0.f);
+		body.move(10.f, 0.f);
 		body.setTextureRect(sf::IntRect(spriteSizeX , spriteSizeY * 2, spriteSizeX, spriteSizeY));
 	}
 	if (direction == 3) // Go Top
