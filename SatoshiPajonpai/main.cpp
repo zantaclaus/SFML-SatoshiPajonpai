@@ -14,6 +14,7 @@
 #include <sstream>
 #include "NPC.h"
 #include "Ghost.h"
+#include "Insect.h"
 
 static const float VIEW_HEIGHT = 1000.0f;
 
@@ -91,6 +92,12 @@ int long main()
 	sf::Texture DocterDown;
 	DocterDown.loadFromFile("assets/textures/DocterDown.png");
 
+	sf::Texture snakeSprite;
+	snakeSprite.loadFromFile("assets/textures/Snake.png");
+
+	sf::Texture snakeTexture;
+	snakeTexture.loadFromFile("assets/textures/SnakeTexture.png");
+
 	// TextImage
 	sf::Texture foundKey;
 	foundKey.loadFromFile("assets/textImages/TextKey.png");
@@ -122,9 +129,18 @@ int long main()
 	sf::Texture TextDieGhost;
 	TextDieGhost.loadFromFile("assets/textImages/TeztDieGhost.png");
 
-	
 	sf::Texture TextSadudKha;
 	TextSadudKha.loadFromFile("assets/textImages/TextSadudKha.png");
+
+	sf::Texture TextToWatchInsideJar;
+	TextToWatchInsideJar.loadFromFile("assets/textImages/TextToWatchInsideJar.png");
+	
+	sf::Texture TextDieSnake;
+	TextDieSnake.loadFromFile("assets/textImages/DeadBySnake.png");
+	
+	sf::Texture TextLabel;
+	TextLabel.loadFromFile("assets/textImages/Label.png");
+
 	//==========================================================================================================================================//
 	// Clock 
 
@@ -219,7 +235,7 @@ int long main()
 	// State obj 
 
 	int checkPoint = 1;
-	int state = 3;
+	int state = 1;
 	int pixel = 16;
 	int randData1;
 	int countDie = 0;
@@ -3103,10 +3119,25 @@ int long main()
 			Ghosty.push_back(new Ghost(&GengarTexture, int(rand()), &Background5, 82.f, 80.f));
 			Ghosty.push_back(new Ghost(&GengarTexture, int(rand()), &Background5, 82.f, 80.f));
 
-			//Run Game
-			player.SetPosition(1168 * 4, 48 * 4);
+			// Insect init
+			Insect insect_Ghost1(&GengarTexture, 16.0 * 4, 19.0 *4, sf::Vector2f(1162.0 * 4, 416.0 * 4), 3);
+			bool check_insect_Ghost1 = false;
+
+			// Trap init
+			Platform trap1_Mushroom(&mushroomTexture, sf::Vector2f(64, 64), sf::Vector2f((1184 - 8) * 4, (256 - 8) * 4));
+			bool check_trap1_Mushroom = false;
+			Platform trap1_Jar(nullptr, sf::Vector2f(70, 70), sf::Vector2f((1184 - 8) * 4, (432 - 8) * 4));
+			Platform trap1_Snake(&snakeTexture, sf::Vector2f(24, 36), sf::Vector2f((1177 ) * 4, (417 ) * 4));
+			
+			Platform label(nullptr, sf::Vector2f(66, 66), sf::Vector2f((992 - 8) * 4, (400 - 8) * 4));
+			
+
+			//---------------------------------------------Run Game---------------------------------------------
+			player.SetPosition(1160 * 4, 48 * 4);
 			while (window.isOpen())
 			{
+				//------------------------------Time Event------------------------------//
+
 				//deltaTime//
 				deltaTime = clock.restart().asSeconds();
 
@@ -3126,9 +3157,27 @@ int long main()
 					}
 				}
 
+				//------------------------------status Update------------------------------//
+
 				// Update Player
 				player.Update(deltaTime);
 
+				// Status Insect
+				if (player.GetPosition().y > 90 * 4 && player.GetPosition().y < 352.0 * 4)
+				{
+					check_insect_Ghost1 = true;
+				}
+				else
+				{
+					check_insect_Ghost1 = false;
+				}
+
+				// Muchroom status	
+				if(player.GetPosition().y >= 224 * 4)
+				{
+					check_trap1_Mushroom = true;
+				}
+				
 				// Gengar Update
 				int index = 0;
 				for (auto* i : Ghosty)
@@ -3179,7 +3228,14 @@ int long main()
 					Ghosty.push_back(new Ghost(&GengarTexture, int(rand()), &Background5, 82.f, 80.f));
 				}
 
-				// Dead By Gengar
+				//------------------------------ Colllision ------------------------------//
+
+				// BitMap Collision
+				Collider playerCollision = player.GetCollider();
+				for (int i = 0; i < block0.size(); i++)
+					block0[i].getCollider().CheckCollision(playerCollision, 1.0f);
+
+				// Gengar Collision
 				for (auto* i : Ghosty)
 				{
 					if (i->GetGlobalBounds().intersects(player.GetGlobalBounds()))
@@ -3219,9 +3275,9 @@ int long main()
 							Background5.Draw(window);
 							player_Die.Draw(window);
 							DieBy_Ghost.Draw(window);
-							
+
 							//Gengar Update
-							int index = 0; 
+							int index = 0;
 							for (auto* i : Ghosty)
 							{
 								i->Update();
@@ -3268,12 +3324,17 @@ int long main()
 							if (Ghosty.size() < 10)
 							{
 								Ghosty.push_back(new Ghost(&GengarTexture, int(rand()), &Background5, 82.f, 80.f));
-							} 
-							
+							}
+
 							for (auto* i : Ghosty) //--> Draw Gengar
 								i->Draw(window);
 
-							
+							// Mushroom Draw
+							if (check_trap1_Mushroom)
+							{
+								trap1_Mushroom.Draw(window);
+							}
+
 							//Window Display
 							window.setView(view);
 							window.display();
@@ -3281,22 +3342,350 @@ int long main()
 					}
 				}
 
-				// BitMap Collision
-				Collider playerCollision = player.GetCollider();
-				for (int i = 0; i < block0.size(); i++)
-					block0[i].getCollider().CheckCollision(playerCollision, 1.0f);
+				// Insect Colision
+				if (player.GetGlobalBounds().intersects(insect_Ghost1.GetGlobalBounds()))
+				{
+					Platform player_Die(&dieTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 15));
+					Platform DieBy_Ghost(&TextDieGhost, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					while (window.isOpen())
+					{
+						//Close Window//
+						sf::Event evnt;
+						while (window.pollEvent(evnt))
+						{
+							switch (evnt.type)
+							{
+							case sf::Event::Closed:
+								window.close();
+								break;
+							case sf::Event::Resized:
+								std::cout << "\Resized\n";
+								ResizeView(window, view);
+								break;
+							case sf::Event::KeyReleased:
+								if (evnt.key.code == sf::Keyboard::Return)
+									restartGame = true;
+								break;
+							}
+						}
 
-				//Draw
+						if (restartGame)
+						{
+							std::cout << "xxxx\n\n";
+							break;
+						}
+
+						window.clear();
+						Background5.Draw(window);
+						player_Die.Draw(window);
+						DieBy_Ghost.Draw(window);
+
+						//Gengar Update
+						int index = 0;
+						for (auto* i : Ghosty)
+						{
+							i->Update();
+							if (i->getDirection() == 0) // Top
+							{
+								if (i->GetPosition().y > 880 * 4)
+								{
+									delete Ghosty.at(index);
+									Ghosty.erase(Ghosty.begin() + index);
+									index--;
+								}
+							}
+							if (i->getDirection() == 1) // Right
+							{
+								if (i->GetPosition().x < 0)
+								{
+									delete Ghosty.at(index);
+									Ghosty.erase(Ghosty.begin() + index);
+									index--;
+								}
+							}
+							if (i->getDirection() == 2) // Left
+							{
+								if (i->GetPosition().x > 1280 * 4)
+								{
+									delete Ghosty.at(index);
+									Ghosty.erase(Ghosty.begin() + index);
+									index--;
+								}
+							}
+							if (i->getDirection() == 3) // Bottom
+							{
+								if (i->GetPosition().y < 0)
+								{
+									delete Ghosty.at(index);
+									Ghosty.erase(Ghosty.begin() + index);
+									index--;
+								}
+							}
+							index++;
+						}
+
+						// Gengar Limited
+						if (Ghosty.size() < 10)
+						{
+							Ghosty.push_back(new Ghost(&GengarTexture, int(rand()), &Background5, 82.f, 80.f));
+						}
+
+						for (auto* i : Ghosty) //--> Draw Gengar
+							i->Draw(window);
+
+
+						//Window Display
+						window.setView(view);
+						window.display();
+					}
+				}
+
+				// Mushroom Collision
+				if (player.GetGlobalBounds().intersects(trap1_Mushroom.GetGlobalBounds()))
+				{
+					Platform player_Die(&dieTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 15));
+					Platform TextDieMushroomTrap1(&TextDieMushroom, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					while (window.isOpen())
+					{
+						//Close Window//
+						sf::Event evnt;
+						while (window.pollEvent(evnt))
+						{
+							switch (evnt.type)
+							{
+							case sf::Event::Closed:
+								window.close();
+								break;
+							case sf::Event::Resized:
+								std::cout << "\Resized\n";
+								ResizeView(window, view);
+								break;
+							case sf::Event::KeyReleased:
+								if (evnt.key.code == sf::Keyboard::Return)
+									restartGame = true;
+								break;
+							}
+						}
+						//Goto Restart//
+						if (restartGame)
+						{
+							std::cout << "xxxx\n\n";
+							break;
+						}
+						//Render Window//
+						window.clear();
+						Background5.Draw(window);
+						
+						player_Die.Draw(window);
+						TextDieMushroomTrap1.Draw(window);
+
+						//Gengar Update
+						int index = 0;
+						for (auto* i : Ghosty)
+						{
+							i->Update();
+							if (i->getDirection() == 0) // Top
+							{
+								if (i->GetPosition().y > 880 * 4)
+								{
+									delete Ghosty.at(index);
+									Ghosty.erase(Ghosty.begin() + index);
+									index--;
+								}
+							}
+							if (i->getDirection() == 1) // Right
+							{
+								if (i->GetPosition().x < 0)
+								{
+									delete Ghosty.at(index);
+									Ghosty.erase(Ghosty.begin() + index);
+									index--;
+								}
+							}
+							if (i->getDirection() == 2) // Left
+							{
+								if (i->GetPosition().x > 1280 * 4)
+								{
+									delete Ghosty.at(index);
+									Ghosty.erase(Ghosty.begin() + index);
+									index--;
+								}
+							}
+							if (i->getDirection() == 3) // Bottom
+							{
+								if (i->GetPosition().y < 0)
+								{
+									delete Ghosty.at(index);
+									Ghosty.erase(Ghosty.begin() + index);
+									index--;
+								}
+							}
+							index++;
+						}
+
+						// Gengar Limited
+						if (Ghosty.size() < 10)
+						{
+							Ghosty.push_back(new Ghost(&GengarTexture, int(rand()), &Background5, 82.f, 80.f));
+						}
+
+						for (auto* i : Ghosty) //--> Draw Gengar
+							i->Draw(window);
+
+						window.setView(view);
+						window.display();
+					}
+				}
+
+				// Goto check Point 3
+				if (player.GetPosition().x < 800 * 4 && player.GetPosition().x > 780 * 4 && player.GetPosition().y > 400 * 4 && player.GetPosition().y < 432 * 4)
+				{
+					state = checkPoint;
+					break;
+				}
+
+				//------------------------------  Draw ------------------------------//
+
+				//Draw Player 
 				view.setCenter(player.GetPosition());
 				std::cout << "x = " << player.GetPosition().x << " y = " << player.GetPosition().y << std::endl;
-
 				window.clear();
 				Background5.Draw(window);
-				player.Draw(window);   //--> Draw Player
+				player.Draw(window);   
 				
-				for (auto* i : Ghosty) //--> Draw Gengar
+				//Insect Draw
+				if (check_insect_Ghost1)
+				{
+					std::cout << "snakeeeeee\n";
+					if(insect_Ghost1.GetPosition().y > 40.0 * 4)
+						insect_Ghost1.Draw(window);
+					insect_Ghost1.Update();
+				}
+
+				// Ghost Draw
+				for (auto* i : Ghosty) 
 					i->Draw(window);
 				
+				// Mushroom Draw
+				if (check_trap1_Mushroom)
+				{
+					trap1_Mushroom.Draw(window);
+				}
+				
+				// Jar
+				if (player.GetGlobalBounds().intersects(trap1_Jar.GetGlobalBounds()))
+				{
+
+					Platform PressToWatch(&TextToWatchInsideJar, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					PressToWatch.Draw(window);
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) || sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad1))
+					{
+						//backgroundState5Texture.loadFromFile("assets/maps/Map5-Snake.png");
+						Platform player_Die(&dieTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y));
+						Platform DieBy_Snake(&TextDieSnake, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										restartGame = true;
+									break;
+								}
+							}
+
+							if (restartGame)
+							{
+								std::cout << "xxxx\n\n";
+								break;
+							}
+
+							window.clear();
+							Background5.Draw(window);
+							player_Die.Draw(window);
+							DieBy_Snake.Draw(window);
+
+							//Gengar Update
+							int index = 0;
+							for (auto* i : Ghosty)
+							{
+								i->Update();
+								if (i->getDirection() == 0) // Top
+								{
+									if (i->GetPosition().y > 880 * 4)
+									{
+										delete Ghosty.at(index);
+										Ghosty.erase(Ghosty.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 1) // Right
+								{
+									if (i->GetPosition().x < 0)
+									{
+										delete Ghosty.at(index);
+										Ghosty.erase(Ghosty.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 2) // Left
+								{
+									if (i->GetPosition().x > 1280 * 4)
+									{
+										delete Ghosty.at(index);
+										Ghosty.erase(Ghosty.begin() + index);
+										index--;
+									}
+								}
+								if (i->getDirection() == 3) // Bottom
+								{
+									if (i->GetPosition().y < 0)
+									{
+										delete Ghosty.at(index);
+										Ghosty.erase(Ghosty.begin() + index);
+										index--;
+									}
+								}
+								index++;
+							}
+
+							// Gengar Limited
+							if (Ghosty.size() < 10)
+							{
+								Ghosty.push_back(new Ghost(&GengarTexture, int(rand()), &Background5, 82.f, 80.f));
+							}
+
+							for (auto* i : Ghosty) //--> Draw Gengar
+								i->Draw(window);
+
+							trap1_Snake.Draw(window);
+							//Window Display
+							window.setView(view);
+							window.display();
+						}
+					}
+				}
+
+				// Label
+				if (player.GetGlobalBounds().intersects(label.GetGlobalBounds()))
+				{
+					Platform Label(&TextLabel, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					Label.Draw(window);
+				}
+
+
+				//------------------------------ Go Other State  ------------------------------//
 				//Goto Restart
 				if (restartGame)
 				{

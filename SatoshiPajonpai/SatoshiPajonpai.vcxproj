@@ -150,6 +150,7 @@
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Ghost.cpp" />
+    <ClCompile Include="Insect.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="NPC.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Ghost.h" />
+    <ClInclude Include="Insect.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="Platform.h" />
