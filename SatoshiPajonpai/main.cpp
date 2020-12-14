@@ -50,6 +50,10 @@ int long main()
 	docterTexture.loadFromFile("assets/textures/DocterSprite.png");
 	NPC Docter1(&docterTexture);
 
+	sf::Texture pickachuTexture;
+	pickachuTexture.loadFromFile("assets/textures/PickachuSprite.png");
+	NPC Pickachu(&pickachuTexture);
+
 	//Ghost 
 	sf::Texture GengarTexture; 
 	GengarTexture.loadFromFile("assets/textures/Gengar.png");
@@ -251,7 +255,7 @@ int long main()
 	// State obj 
 
 	int checkPoint = 5;
-	int state = 1;
+	int state = 5;
 	int pixel = 16;
 	int randData1;
 	int countDie = 0;
@@ -260,14 +264,14 @@ int long main()
 	bool continueGame = false;
 	bool checkstate1_out = false;
 	bool checkPointMap4 = false;
-	bool checkPointMap5 = false;
+	bool checkPointMap5_1= false;
+	bool checkPointMap5_2= true;
 
 	//==========================================================================================================================================// 
 	// Run Game
 
 	while (true)
 	{
-		
 		//========================== status state ===========================//
 		bool checkPokeballTrap1 = false;   //-----> state 2
 		bool checkTrap2 = false;
@@ -3216,9 +3220,10 @@ int long main()
 			Platform Pokeball_1(&pokeballTexture, sf::Vector2f(64, 64), sf::Vector2f((848 - 8) * 4, (96 - 8) * 4));
 			bool check_Pokeball_1 = false;
 
-			// Flower init
-			Platform flower_Checkpoint_1(&flowerItemTexture, sf::Vector2f(64, 64), sf::Vector2f((672 - 8) * 4, (816 - 8) * 4));
-			Platform flower_Checkpoint_2(&flowerItemTexture, sf::Vector2f(64, 64), sf::Vector2f((576 - 8) * 4, (64 - 8) * 4));
+			// Flower Check Point init
+			Platform flower_Checkpoint_1(&flowerItemTexture, sf::Vector2f(64, 64), sf::Vector2f((672 - 8) * 4, (816 - 8) * 4)); //stone
+			Platform flower_Checkpoint_2(&flowerItemTexture, sf::Vector2f(64, 64), sf::Vector2f((576 - 8) * 4, (64 - 8) * 4)); //check1
+			Platform flower_Checkpoint_3(&flowerItemTexture, sf::Vector2f(64, 64), sf::Vector2f((240) * 4, (176) * 4));        // check2
 
 			// Stone init
 			Platform stone_Checkpoint1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((672 - 8) * 4, (816 - 8) * 4));
@@ -3230,14 +3235,17 @@ int long main()
 			Platform stone_LastTrap_1(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((80 - 8) * 4, (608 - 8) * 4));
 			Platform stone_LastTrap_2(&stoneTexture, sf::Vector2f(64, 64), sf::Vector2f((80 - 8) * 4, (624 - 8) * 4));
 
-
+			// Door
+			Platform DoorLeft(nullptr, sf::Vector2f(32, 8), sf::Vector2f((144 - 8) * 4, (48) * 4));
+			Platform DoorRight (nullptr, sf::Vector2f(32, 8), sf::Vector2f((336 - 8) * 4, (48) * 4));
 
 			//---------------------------------------------Run Game---------------------------------------------
-			if(!checkPointMap5)
-				player.SetPosition(1160 * 4, 48 * 4);
-			else
-				player.SetPosition(576 * 4, 64 * 4);
-
+			if(checkPointMap5_2)
+				player.SetPosition(240 * 4, 176 * 4);  // checkPoint 2
+			else if(checkPointMap5_1)
+				player.SetPosition(576 * 4, 64 * 4); // checkPoint 1
+			else 
+				player.SetPosition(1160 * 4, 48 * 4);  // start
 			while (window.isOpen())
 			{
 				//------------------------------Time Event------------------------------//
@@ -3444,7 +3452,7 @@ int long main()
 								trap1_Mushroom.Draw(window);
 							}
 							// CheckPoint Draw
-							if (!checkPointMap5)
+							if (!checkPointMap5_1)
 							{
 								flower_Checkpoint_2.Draw(window);
 							}
@@ -3918,16 +3926,16 @@ int long main()
 					}
 				}
 
-				// Check Point
+				// Check Point 1
 				if (player.GetGlobalBounds().intersects(flower_Checkpoint_2.GetGlobalBounds())) 
 				{
-					if (checkPointMap5 == false)
+					if (checkPointMap5_1 == false)
 					{
 						Platform FoundCheckPoint(&TextFoundCheckPoint, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
 
 						std::cout << "CHECKPOINT ON\n";
 						checkPoint = 5;
-						checkPointMap5 = true;
+						checkPointMap5_1 = true;
 						while (window.isOpen())
 						{
 							//Close Window//
@@ -3966,9 +3974,64 @@ int long main()
 						}
 					}
 				}
-				if (!checkPointMap5)
+				if (!checkPointMap5_1)
 				{
 					flower_Checkpoint_2.Draw(window);
+				}
+
+				// Check Point 2
+				if (player.GetGlobalBounds().intersects(flower_Checkpoint_3.GetGlobalBounds()))
+				{
+					if (checkPointMap5_2 == false)
+					{
+						Platform FoundCheckPoint(&TextFoundCheckPoint, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+
+						std::cout << "CHECKPOINT ON\n";
+						
+						checkPoint = 5;
+						checkPointMap5_2 = true;
+						while (window.isOpen())
+						{
+							//Close Window//
+							sf::Event evnt;
+							while (window.pollEvent(evnt))
+							{
+								switch (evnt.type)
+								{
+								case sf::Event::Closed:
+									window.close();
+									break;
+								case sf::Event::Resized:
+									std::cout << "\Resized\n";
+									ResizeView(window, view);
+									break;
+								case sf::Event::KeyReleased:
+									if (evnt.key.code == sf::Keyboard::Return)
+										continueGame = true;
+									break;
+								}
+							}
+
+							if (continueGame)
+							{
+								std::cout << "Enter Click\n\n";
+
+								continueGame = false;
+								break;
+							}
+							window.clear();
+							Background5.Draw(window);
+							player.Draw(window);
+							window.setView(view);
+							label2.Draw(window);
+							FoundCheckPoint.Draw(window);
+							window.display();
+						}
+					}
+				}
+				if (!checkPointMap5_2)
+				{
+					flower_Checkpoint_3.Draw(window);
 				}
 
 				// Trap Treasure
@@ -4097,11 +4160,501 @@ int long main()
 					std::cout << "\nRestart in State 1\n";
 					break;
 				}
+					
+				// Goto DoorRight
+				if (player.GetGlobalBounds().intersects(DoorRight.GetGlobalBounds()))
+				{
+					state = 6;
+					break;
+				}
+
+				// Goto DoorLeft
+				if (player.GetGlobalBounds().intersects(DoorLeft.GetGlobalBounds()))
+				{
+					state = 7;
+					break;
+				}
 
 				// Window Display
 				window.setView(view);
 				window.display();
 			}
+		}
+		else if (state == 6)
+		{
+			// Background
+			sf::Texture backgroundState6Texture;
+			backgroundState6Texture.loadFromFile("assets/maps/Map6.png");
+			Platform Background(&backgroundState6Texture, sf::Vector2f(160 * 64 / 16, 160 * 64 / 16), sf::Vector2f(160 * 64 / 32, 160 * 64 / 32));
+
+			// BitMap Init
+			std::vector<Bitmap> block0;
+			int outdoor[10][10] = {
+									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+									{1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+									{1, 0, 1, 1, 1, 1, 1, 1, 0, 1},
+									{1, 0, 1, 1, 1, 1, 1, 1, 0, 1},
+									{1, 0, 1, 1, 1, 1, 1, 1, 0, 1},
+									{1, 0, 1, 1, 1, 1, 1, 1, 0, 1},
+									{1, 0, 1, 1, 1, 1, 1, 1, 0, 1},
+									{1, 0, 1, 1, 1, 1, 1, 1, 0, 1},
+									{1, 0, 1, 1, 1, 1, 1, 1, 0, 1},
+			};
+
+			// DrawBitMap
+			for (int mapX = 0; mapX < 10; mapX++)
+			{
+				for (int mapY = 0; mapY < 10; mapY++)
+				{
+					if (outdoor[mapY][mapX] == 1)
+					{
+						Bitmap outdoor(nullptr, sf::Vector2f(((mapX) * 64.f) + 32.f, ((mapY) * 64.f) + 32.f), sf::Vector2f(64.f, 64.f));
+						block0.push_back(outdoor);
+					}
+				}
+			}
+
+			// Platform Init
+			Platform door(nullptr, sf::Vector2f(5.f, 5.f), sf::Vector2f((144-8) * 64 / 16, (160-8) * 64 / 16));
+			Platform check_door(nullptr, sf::Vector2f(1.f, 1.f), sf::Vector2f((144-8) * 64 / 16, (160-8) * 64 / 16));
+
+			// Ghost init
+			Insect insect_Ghost1(&GengarTexture, 16.0 * 4, 19.0 * 4, sf::Vector2f((144-8) * 4, 0 * 4), 0);
+	
+			// ------------------------------------------------ Run Game ------------------------------------------------
+			player.SetPosition((144 - 8) * 4, (144 - 8) * 4);
+			Pickachu.SetPosition(136.5 * 4, 32 * 4);
+			while (window.isOpen())
+			{
+				randData1 = rand();
+				//--------------------------------------------- SetUp ---------------------------------------------
+
+				//deltaTime//
+				deltaTime = clock.restart().asSeconds();
+
+				//Close Window//
+				sf::Event evnt;
+				while (window.pollEvent(evnt))
+				{
+					switch (evnt.type)
+					{
+					case sf::Event::Closed:
+						window.close();
+						break;
+					case sf::Event::Resized:
+						std::cout << "\Resized\n";
+						ResizeView(window, view);
+						break;
+					}
+				}
+
+				//--------------------------------------------- Collision ---------------------------------------------
+
+				//Player Update
+				player.Update(deltaTime);
+				Pickachu.Update(randData1);
+				insect_Ghost1.Update();
+
+				//BitMap Collision
+				Collider playerCollision = player.GetCollider();
+				for (int i = 0; i < block0.size(); i++)
+					block0[i].getCollider().CheckCollision(playerCollision, 1.0f);
+				
+				// Door Collision
+				check_door.GetCollider().CheckCollision(playerCollision, 1.0f);
+
+
+				// Insect Colision
+				if (player.GetGlobalBounds().intersects(insect_Ghost1.GetGlobalBounds()))
+				{
+					Platform player_Die(&dieUpTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 15));
+					Platform DieBy_Ghost(&TextDieGhost, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					while (window.isOpen())
+					{
+						//Close Window//
+						sf::Event evnt;
+						while (window.pollEvent(evnt))
+						{
+							switch (evnt.type)
+							{
+							case sf::Event::Closed:
+								window.close();
+								break;
+							case sf::Event::Resized:
+								std::cout << "\Resized\n";
+								ResizeView(window, view);
+								break;
+							case sf::Event::KeyReleased:
+								if (evnt.key.code == sf::Keyboard::Return)
+									restartGame = true;
+								break;
+							}
+						}
+
+						if (restartGame)
+						{
+							std::cout << "xxxx\n\n";
+							break;
+						}
+
+						window.clear();
+						Background.Draw(window);
+						player_Die.Draw(window);
+						DieBy_Ghost.Draw(window);
+						Pickachu.Draw(window);
+
+						//Window Display
+						window.setView(view);
+						window.display();
+					}
+				}
+				//--------------------------------------------- Draw ---------------------------------------------
+
+				//Draw
+				view.setCenter(player.GetPosition());
+				std::cout << "x = " << player.GetPosition().x << " y = " << player.GetPosition().y << std::endl;
+				window.clear();
+				Background.Draw(window);
+				player.Draw(window);
+				insect_Ghost1.Draw(window);
+				Pickachu.Draw(window);
+
+				//--------------------------------------------- Change State ---------------------------------------------
+				
+				//Goto State 5
+				if (player.GetGlobalBounds().intersects(door.GetGlobalBounds()))
+				{
+					Platform DoorLocked(&TextDoorLocked, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					DoorLocked.Draw(window);
+				}
+				//Goto Restart
+				if (restartGame)
+				{
+					std::cout << "\nRestart in State 1\n";
+
+					break;
+				}
+
+				//Window Display
+				window.setView(view);
+				window.display();
+			}
+
+		}
+		else if (state == 7)
+		{
+			// Background
+			sf::Texture backgroundState6Texture;
+			backgroundState6Texture.loadFromFile("assets/maps/Map6.png");
+			Platform Background(&backgroundState6Texture, sf::Vector2f(160 * 64 / 16, 160 * 64 / 16), sf::Vector2f(160 * 64 / 32, 160 * 64 / 32));
+
+			// BitMap Init
+			std::vector<Bitmap> block0;
+			int outdoor[10][10] = {
+									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+									{1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+									{1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+									{1, 0, 1, 1, 1, 1, 1, 1, 0, 1},
+									{1, 0, 1, 1, 1, 1, 1, 1, 0, 1},
+									{1, 0, 1, 1, 1, 1, 1, 1, 0, 1},
+									{1, 0, 1, 1, 1, 1, 1, 1, 0, 1},
+									{1, 0, 1, 1, 1, 1, 1, 1, 0, 1},
+									{1, 0, 1, 1, 1, 1, 1, 1, 0, 1},
+									{1, 0, 1, 1, 1, 1, 1, 1, 0, 1},
+			};
+
+			// DrawBitMap
+			for (int mapX = 0; mapX < 10; mapX++)
+			{
+				for (int mapY = 0; mapY < 10; mapY++)
+				{
+					if (outdoor[mapY][mapX] == 1)
+					{
+						Bitmap outdoor(nullptr, sf::Vector2f(((mapX) * 64.f) + 32.f, ((mapY) * 64.f) + 32.f), sf::Vector2f(64.f, 64.f));
+						block0.push_back(outdoor);
+					}
+				}
+			}
+
+			// Platform Init
+			Platform door(nullptr, sf::Vector2f(5.f, 5.f), sf::Vector2f((32 - 8) * 64 / 16, (160 - 8) * 64 / 16));
+			Platform check_door(nullptr, sf::Vector2f(1.f, 1.f), sf::Vector2f((32 - 8) * 64 / 16, (160 - 8) * 64 / 16));
+
+			// Ghost init
+			int count_Ghost = 0;
+			bool check_Ghost1 = false;
+			bool check_Ghost2 = false;
+			bool check_Ghost3 = false;
+			bool status_player = false;
+			Insect insect_Ghost1(&GengarTexture, 16.0 * 4, 19.0 * 4, sf::Vector2f((160 - 8) * 4, (32 - 8) * 4), 1);
+			Insect insect_Ghost2(&GengarTexture, 16.0 * 4, 19.0 * 4, sf::Vector2f((160 - 8) * 4, (32 - 8) * 4), 1);
+			Insect insect_Ghost3(&GengarTexture, 16.0 * 4, 19.0 * 4, sf::Vector2f((160 - 8) * 4, (32 - 8) * 4), 1);
+
+			// ------------------------------------------------ Run Game ------------------------------------------------
+			player.SetPosition((32 - 8) * 4, (144 - 8) * 4);
+			Pickachu.SetPosition(136.5 * 4,32 * 4);
+			while (window.isOpen())
+			{
+				randData1 = rand();
+				//------------------------------------------ SetUp ---------------------------------------------
+
+				//deltaTime//
+				deltaTime = clock.restart().asSeconds();
+
+				//Close Window//
+				sf::Event evnt;
+				while (window.pollEvent(evnt))
+				{
+					switch (evnt.type)
+					{
+					case sf::Event::Closed:
+						window.close();
+						break;
+					case sf::Event::Resized:
+						std::cout << "\Resized\n";
+						ResizeView(window, view);
+						break;
+					}
+				}
+
+				//------------------------------------------ Collision ---------------------------------------------
+
+				//Player Update
+				player.Update(deltaTime);
+				Pickachu.Update(randData1);
+
+				//BitMap Collision
+				Collider playerCollision = player.GetCollider();
+				for (int i = 0; i < block0.size(); i++)
+					block0[i].getCollider().CheckCollision(playerCollision, 1.0f);
+
+				// Door Collision
+				check_door.GetCollider().CheckCollision(playerCollision, 1.0f);
+
+				
+				
+
+				//--------------------------------------------- Draw ---------------------------------------------
+
+				//Draw
+				view.setCenter(player.GetPosition());
+				std::cout << "x = " << player.GetPosition().x << " y = " << player.GetPosition().y << std::endl;
+				window.clear();
+				Background.Draw(window);
+				player.Draw(window);
+				Pickachu.Draw(window);
+
+				//----------------------------------------- Trap Ghost ---------------------------------------------
+
+				//Ghost 1 status
+				if (!check_Ghost1 && !status_player && player.GetPosition().x > 32 * 4  && player.GetPosition().y < 48 * 4)
+				{
+					check_Ghost1 = true;
+					status_player = true;
+					count_Ghost = 1;
+				}
+
+				//Ghost 2 status
+				if (!check_Ghost2 && !status_player && player.GetPosition().x > 32 * 4 && player.GetPosition().y < 48 * 4)
+				{
+					check_Ghost2 = true;
+					status_player = true;
+					count_Ghost = 2;
+				}
+
+				//Ghost 3 status
+				if (!check_Ghost3 && !status_player && player.GetPosition().x > 32 * 4 && player.GetPosition().y < 48 * 4)
+				{
+					check_Ghost3 = true;
+					status_player = true;
+					count_Ghost = 3;
+				}
+
+				//Ghost 1 Run
+				if (check_Ghost1)
+				{
+					insect_Ghost1.Update();
+					if (insect_Ghost1.GetPosition().x > 0)
+						insect_Ghost1.Draw(window);
+				}
+
+				//Ghost 2 Run
+				if (check_Ghost2)
+				{
+					insect_Ghost2.Update();
+					if (insect_Ghost2.GetPosition().x > 0)
+						insect_Ghost2.Draw(window);
+				}
+
+				//Ghost 3 Run
+				if (check_Ghost3)
+				{
+					insect_Ghost3.Update();
+					if (insect_Ghost3.GetPosition().x > 0)
+						insect_Ghost3.Draw(window);
+				}
+
+				// Ghost reset Status
+				if (player.GetPosition().y > 50 * 4)
+					status_player = false;
+
+				// Insect Colision
+				if (player.GetGlobalBounds().intersects(insect_Ghost1.GetGlobalBounds()))
+				{
+					Platform player_Die(&dieRightTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 15));
+					Platform DieBy_Ghost(&TextDieGhost, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					while (window.isOpen())
+					{
+						//Close Window//
+						sf::Event evnt;
+						while (window.pollEvent(evnt))
+						{
+							switch (evnt.type)
+							{
+							case sf::Event::Closed:
+								window.close();
+								break;
+							case sf::Event::Resized:
+								std::cout << "\Resized\n";
+								ResizeView(window, view);
+								break;
+							case sf::Event::KeyReleased:
+								if (evnt.key.code == sf::Keyboard::Return)
+									restartGame = true;
+								break;
+							}
+						}
+
+						if (restartGame)
+						{
+							std::cout << "xxxx\n\n";
+							break;
+						}
+
+						window.clear();
+						Background.Draw(window);
+						player_Die.Draw(window);
+						DieBy_Ghost.Draw(window);
+						Pickachu.Draw(window);
+
+						//Window Display
+						window.setView(view);
+						window.display();
+					}
+				}
+
+				// Insect Colision
+				if (player.GetGlobalBounds().intersects(insect_Ghost2.GetGlobalBounds()))
+				{
+					Platform player_Die(&dieRightTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 15));
+					Platform DieBy_Ghost(&TextDieGhost, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					while (window.isOpen())
+					{
+						//Close Window//
+						sf::Event evnt;
+						while (window.pollEvent(evnt))
+						{
+							switch (evnt.type)
+							{
+							case sf::Event::Closed:
+								window.close();
+								break;
+							case sf::Event::Resized:
+								std::cout << "\Resized\n";
+								ResizeView(window, view);
+								break;
+							case sf::Event::KeyReleased:
+								if (evnt.key.code == sf::Keyboard::Return)
+									restartGame = true;
+								break;
+							}
+						}
+
+						if (restartGame)
+						{
+							std::cout << "xxxx\n\n";
+							break;
+						}
+
+						window.clear();
+						Background.Draw(window);
+						player_Die.Draw(window);
+						DieBy_Ghost.Draw(window);
+						Pickachu.Draw(window);
+
+						//Window Display
+						window.setView(view);
+						window.display();
+					}
+				}
+				
+				// Insect Colision
+				if (player.GetGlobalBounds().intersects(insect_Ghost3.GetGlobalBounds()))
+				{
+					Platform player_Die(&dieRightTexture, sf::Vector2f(56.f * 2, 82.f * 1.5), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 15));
+					Platform DieBy_Ghost(&TextDieGhost, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					while (window.isOpen())
+					{
+						//Close Window//
+						sf::Event evnt;
+						while (window.pollEvent(evnt))
+						{
+							switch (evnt.type)
+							{
+							case sf::Event::Closed:
+								window.close();
+								break;
+							case sf::Event::Resized:
+								std::cout << "\Resized\n";
+								ResizeView(window, view);
+								break;
+							case sf::Event::KeyReleased:
+								if (evnt.key.code == sf::Keyboard::Return)
+									restartGame = true;
+								break;
+							}
+						}
+
+						if (restartGame)
+						{
+							std::cout << "xxxx\n\n";
+							break;
+						}
+
+						window.clear();
+						Background.Draw(window);
+						player_Die.Draw(window);
+						DieBy_Ghost.Draw(window);
+						Pickachu.Draw(window);
+
+						//Window Display
+						window.setView(view);
+						window.display();
+					}
+				}
+				
+				//--------------------------------------------- Change State ---------------------------------------------
+
+				//Goto State 5
+				if (player.GetGlobalBounds().intersects(door.GetGlobalBounds()))
+				{
+					Platform DoorLocked(&TextDoorLocked, sf::Vector2f(1000, 120), sf::Vector2f(player.GetPosition().x, player.GetPosition().y + 400));
+					DoorLocked.Draw(window);
+				}
+				//Goto Restart
+				if (restartGame)
+				{
+					std::cout << "\nRestart in State 1\n";
+
+					break;
+				}
+
+				//Window Display
+				window.setView(view);
+				window.display();
+			}
+
 		}
 
 		//============================= Restart =============================//
